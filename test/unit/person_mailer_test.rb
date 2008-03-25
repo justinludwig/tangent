@@ -16,15 +16,34 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
+require File.dirname(__FILE__) + '/../test_helper'
+require 'person_mailer'
 
-class ApplicationController < ActionController::Base
-  include AuthenticatedSystem
-  
-  helper :all # include all helpers, all the time
+class PersonMailerTest < Test::Unit::TestCase
+  FIXTURES_PATH = File.dirname(__FILE__) + '/../fixtures'
+  CHARSET = "utf-8"
 
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => '51b7778c2d93981d22553fb1b9a42684'
+  include ActionMailer::Quoting
+
+  def setup
+    ActionMailer::Base.delivery_method = :test
+    ActionMailer::Base.perform_deliveries = true
+    ActionMailer::Base.deliveries = []
+
+    @expected = TMail::Mail.new
+    @expected.set_content_type "text", "plain", { "charset" => CHARSET }
+  end
+
+  def test_dummy_test
+    #do nothing
+  end
+
+  private
+    def read_fixture(action)
+      IO.readlines("#{FIXTURES_PATH}/person_mailer/#{action}")
+    end
+
+    def encode(subject)
+      quoted_printable(subject, CHARSET)
+    end
 end

@@ -1,0 +1,48 @@
+<%
+## Tangent, an online sign-up sheet
+## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
+## 
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+## 02110-1301, USA.
+-%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title><% if @page_title %><%=h @page_title %> - <% end %>Tangent</title>
+  <%= stylesheet_link_tag 'scaffold' %>
+</head>
+<body>
+    
+<% if logged_in? %>
+  <p>Welcome, <%=h current_person.display_name %>. <%= link_to "Logout", session_path, :method => "delete" %></p>
+<% else %>
+  <p>You are not logged in. <%= link_to "Register", new_person_path %> or <%= link_to "Login", new_session_path %></p>
+<% end %>
+
+<% if flash[:notice] %>
+  <p style="color:green"><%= flash[:notice] %></p>
+<% end %>
+    
+<% if flash[:error] %>
+  <p style="color:red"><%= flash[:error] %></p>
+<% end %>
+
+<%= yield  %>
+
+</body>
+</html>

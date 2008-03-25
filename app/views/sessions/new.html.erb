@@ -1,3 +1,4 @@
+<%
 ## Tangent, an online sign-up sheet
 ## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
 ## 
@@ -15,16 +16,19 @@
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
+-%>
 
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
+<% @page_title = "Login" %>
 
-class ApplicationController < ActionController::Base
-  include AuthenticatedSystem
-  
-  helper :all # include all helpers, all the time
+<% form_tag session_path do -%>
+<p><label for="login">Email</label><br/>
+<%= text_field_tag 'login' %></p>
 
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => '51b7778c2d93981d22553fb1b9a42684'
-end
+<p><label for="password">Password</label><br/>
+<%= password_field_tag 'password' %></p>
+
+<p><label for="remember_me">Remember me:</label>
+<%= check_box_tag 'remember_me' %></p>
+
+<p><%= submit_tag 'Log in' %></p>
+<% end -%>

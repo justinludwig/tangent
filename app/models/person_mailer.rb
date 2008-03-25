@@ -16,15 +16,27 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
-class ApplicationController < ActionController::Base
-  include AuthenticatedSystem
+class PersonMailer < ActionMailer::Base
+  def signup_notification(person)
+    setup_email(person)
+    @subject    += 'Please activate your new account'
   
-  helper :all # include all helpers, all the time
-
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => '51b7778c2d93981d22553fb1b9a42684'
+    @body[:url]  = "http://YOURSITE/"
+  
+  end
+  
+  def activation(person)
+    setup_email(person)
+    @subject    += 'Your account has been activated!'
+    @body[:url]  = "http://YOURSITE/"
+  end
+  
+  protected
+    def setup_email(person)
+      @recipients  = "#{person.email}"
+      @from        = "ADMINEMAIL"
+      @subject     = "[YOURSITE] "
+      @sent_on     = Time.now
+      @body[:person] = person
+    end
 end
