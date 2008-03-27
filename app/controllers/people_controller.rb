@@ -79,10 +79,18 @@ class PeopleController < ApplicationController
     @person = Person.new(params[:person])
 
     respond_to do |format|
-      # todo: why call register twice?!!
-      @person.register! if @person.valid? && @person.register!
-      if @person.errors.empty?
-        flash[:notice] = "Thanks for signing up!"
+      if @person.save
+        # save first, then state-transitions (register!) will work
+        @person.register!
+
+        # automatically "login" if self-reg
+        if (!self.current_person)
+          self.current_person = @person if !self.current_person
+          flash[:notice] = "Thanks for signing up!"
+        else
+          flash[:notice] = 'Person was successfully created.'
+        end
+
         format.html { redirect_back_or_default(@person) }
         format.xml  { render :xml => @person, :status => :created, :location => @person }
       else
