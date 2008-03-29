@@ -30,9 +30,21 @@ class InitialModels < ActiveRecord::Migration
       t.column :state, :string, :limit => 20, :null => :no, :default => 'passive'
       t.column :deleted_at, :datetime
     end
+
+    create_table :events do |t|
+      t.column :name, :string, :limit => 50
+      t.column :description, :string, :limit => 50
+      t.column :details, :text
+      t.column :start_date, :datetime
+      t.column :end_date, :datetime
+      t.column :tags, :string
+
+      t.timestamps
+    end
   end
 
   def self.down
     drop_table "people"
+    drop_table :events
   end
 end

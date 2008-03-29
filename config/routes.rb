@@ -17,6 +17,8 @@
 ## 02110-1301, USA.
 
 ActionController::Routing::Routes.draw do |map|
+  map.resources :events
+
   map.resources :people
   map.resource :session
   

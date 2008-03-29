@@ -11,6 +11,17 @@
 
 ActiveRecord::Schema.define(:version => 1) do
 
+  create_table "events", :force => true do |t|
+    t.string   "name",        :limit => 50
+    t.string   "description", :limit => 50
+    t.text     "details"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "tags"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "people", :force => true do |t|
     t.string   "email",                     :limit => 50
     t.string   "display_name",              :limit => 50
