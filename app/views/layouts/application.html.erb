@@ -24,25 +24,54 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title><% if @page_title %><%=h @page_title %> - <% end %>Tangent</title>
-  <%= stylesheet_link_tag 'scaffold' %>
+  <%= stylesheet_link_tag :all, :cache => true %> 
+  <%= javascript_include_tag :all, :cache => true %>
 </head>
 <body>
-    
+
+<div id="head" class="lr-container">
+
+<span class="l">
+    <%= link_to "Tangent", "/" %>
 <% if logged_in? %>
-  <p>Welcome, <%=h current_person.display_name %>. <%= link_to "Logout", session_path, :method => "delete" %></p>
-<% else %>
-  <p>You are not logged in. <%= link_to "Register", new_person_path %> or <%= link_to "Login", new_session_path %></p>
+    &nbsp;|&nbsp;
+    <%= link_to_unless_current "My Stuff", "/my" %>
+    &nbsp;|&nbsp;
+    <%= link_to_unless_current "My Profile", current_person %>
 <% end %>
+</span>
+<span class="r">
+<% if logged_in? %>
+    <%=h current_person.display_name %>
+    &nbsp;|&nbsp;
+    <%= link_to "Logout", session_path, :method => "delete" %>
+<% else %>
+    <%= link_to_unless_current "Register", new_person_path %>
+    &nbsp;|&nbsp;
+    <%= link_to_unless_current "Login", new_session_path %>
+<% end %>
+</span>
+
+</div>
+<div id="flash">
 
 <% if flash[:notice] %>
-  <p style="color:green"><%= flash[:notice] %></p>
+  <p class="notice"><%= flash[:notice] %></p>
 <% end %>
     
 <% if flash[:error] %>
-  <p style="color:red"><%= flash[:error] %></p>
+  <p class="error"><%= flash[:error] %></p>
 <% end %>
 
+</div>
+<div id="body">
+
 <%= yield  %>
+
+</div>
+<div id="foot">
+
+</div>
 
 </body>
 </html>

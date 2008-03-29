@@ -1,0 +1,305 @@
+/*
+Tangent, an online sign-up sheet
+Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301, USA.
+*/
+
+/* general */
+
+* {
+    font-size: 100%;
+}
+
+body, address, blockquote, center, del, div, h1, h2, h3, h4, h5, h6, ins, p, pre, dl, dt, dd, li, ol, ul, table, caption, thead, tfoot, tbody, tr, td, th, form, fieldset, legend, label, a, applet, br, iframe, img, object, q, span, sub, sup, abbr, acronym, cite, code, dfn, em, kdb, samp, strong, var {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: inherit;
+    font-style: inherit;
+}
+
+body, textarea {
+    font-family: tahoma, sans-serif;
+}
+body {
+    color: #333;
+    background-color: #fff;
+    font-size: 0.85em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0.3em 0 0.1em 0;
+    font-weight: bold;
+}
+h1 {
+    font-size: 2.0em;
+}
+h2 {
+    font-size: 1.7em;
+}
+h3 {
+    font-size: 1.4em;
+}
+h4 {
+    font-size: 1.1em;
+}
+h5 {
+    font-size: 0.85em;
+}
+h6 {
+    font-size: 0.7em;
+}
+
+p {
+    margin: 0.4em 0;
+}
+pre {
+    font-family: monospace;
+}
+address {
+    font-style: italic;
+}
+ins {
+    background-color: #efe;
+    text-decoration: none;
+}
+del {
+    background-color: #fee;
+    text-decoration: none;
+}
+blockquote {
+    color: #000;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    margin: 0.2em 1em;
+    padding: 0.2em;
+    font-size: 0.95em;
+}
+
+caption, th {
+    text-align: left;
+}
+.tbl {
+    border: 1px solid #ccc;
+    width: 100%;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+fieldset .tbl {
+    width: 99%;
+    margin: 0.5em;
+}
+.tbl caption {
+    padding: 0.5em 0.3em;
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.tbl th {
+    border: solid #ccc;
+    border-width: 1px 0;
+    padding: 0.2em 0.3em;
+    background-color: #ddd;
+}
+.tbl td {
+    border: solid #ccc;
+    border-width: 1px 0;
+    padding: 0.1em 0.3em;
+}
+.tbl .date {
+    white-space: nowrap;
+}
+.tbl .tools {
+    text-align: right;
+    white-space: nowrap;
+}
+.tbl .alt {
+    background-color: #f4f4f4;
+}
+.tbl .old {
+    color: #777;
+}
+.tbl .old a {
+    color: #77c;
+}
+.tbl .old a:visited {
+    color: #c7c;
+}
+.tbl .primary td {
+    border-bottom: 0;
+}
+.tbl .secondary td {
+    border-top: 0;
+    font-style: italic;
+}
+
+dl {
+    margin: 0.3em 0;
+}
+dt {
+    margin-top: 0.2em;
+    font-weight: bold;
+}
+dd {
+    margin: 0 0 0.2em 1em;
+    font-size: 0.9em;
+}
+ol, ul {
+    margin: 0.3em 1em;
+    list-style-position: inside;
+}
+
+fieldset {
+    border: 2px groove white;
+    margin: 0.5em;
+    padding: 0.2em;
+}
+legend {
+    padding: 0 0.2em;
+}
+label {
+    font-weight: bold; text-align: right;
+}
+.disabled label {
+    font-weight: normal;
+}
+
+button {
+    margin-right: 0.2em;
+    text-align: center;
+}
+button, select, option {
+    cursor: pointer;
+}
+input[type="checkbox"], input[type="radio"] {
+    margin-left: 0;
+    vertical-align: middle;
+    cursor: pointer;
+}
+button[disabled], select[disabled], option[disabled] {
+    cursor: default;
+}
+
+img {
+    vertical-align: middle;
+}
+
+sub, sup {
+    font-size: 0.8em;
+}
+code, kbd, samp, var, tt {
+    font-family: monospace;
+}
+em {
+    font-style: italic;
+}
+strong {
+    font-weight: bold;
+}
+abbr, acronym, dfn, samp, var {
+    color: #006;
+}
+abbr, acronym, dfn {
+    cursor: help;
+}
+big {
+    font-size: 1.7em;
+}
+small {
+    font-size: 0.7em;
+}
+
+/* forms */
+
+.property {
+    padding: 0.3em 0.5em;
+}
+.property .property-label {
+    float: left;
+    width: 25%;
+    padding: 0 0.5em;
+}
+/*
+.required .property-label:before {
+    content: "*";
+}
+*/
+.property-description {
+    font-size: 0.9em
+}
+
+.buttons {
+    padding: 0.3em 1em;
+    text-align: right;
+}
+
+.notice {
+    color: #060;
+}
+
+.error {
+    color: #c00;
+}
+
+/* panels */
+
+.lr-container {
+    position: relative;
+}
+
+.lr-container .l {
+    display: block;
+}
+
+.lr-container .r {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+}
+
+/* page */
+
+#head, #foot, #flash, #body {
+    padding: 0.3em 1em;
+}
+
+#head {
+    color: #fff;
+    background-color: #036;
+}
+#head a {
+    color: #eef;
+}
+#head a:visited {
+    color: #fef;
+}
+#head .r {
+    top: 0.3em;
+    right: 1em;
+}
+
+/*
+#foot {
+    background-color: #eee;
+}
+*/
+
+#flash {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
