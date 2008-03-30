@@ -25,5 +25,7 @@ This program also includes software authored by the following people:
   - restful_authentication plugin (http://svn.techno-weenie.net/projects/plugins/restful_authentication)
 * Scott Barron 
   - acts_as_state_machine plugin (http://elitists.textdriven.com/svn/plugins/acts_as_state_machine)
+* Paweł Stradomski
+  - sliding_sessions plugin (http://squarewheel.wordpress.com/2007/11/03/session-cookie-expiration-time-in-rails/)
 
 

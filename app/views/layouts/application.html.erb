@@ -35,7 +35,7 @@
     <%= link_to "Tangent", "/" %>
 <% if logged_in? %>
     &nbsp;|&nbsp;
-    <%= link_to_unless_current "My Stuff", "/my" %>
+    <%= link_to_unless_current "My Stuff", my_stuff_path %>
     &nbsp;|&nbsp;
     <%= link_to_unless_current "My Profile", current_person %>
     &nbsp;|&nbsp;

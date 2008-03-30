@@ -16,19 +16,5 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
-class ApplicationController < ActionController::Base
-  include AuthenticatedSystem
-  
-  # sliding_sessions
-  REMEMBER_ME_EXPIRES = 4.months
-  session :session_expires_after => REMEMBER_ME_EXPIRES
-  
-  helper :all # include all helpers, all the time
-
-  # See ActionController::RequestForgeryProtection for details
-  # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => '51b7778c2d93981d22553fb1b9a42684'
+module MyStuffHelper
 end

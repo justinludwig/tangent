@@ -31,23 +31,11 @@ class PersonTest < Test::Unit::TestCase
     end
   end
 
-  def test_should_initialize_activation_code_upon_creation
-    person = create_person
-    assert_not_nil person.reload.activation_code
-  end
-
   def test_should_create_and_start_in_pending_state
     person = create_person
     assert person.pending?
   end
 
-
-  def test_should_require_login
-    assert_no_difference 'Person.count' do
-      u = create_person(:login => nil)
-      assert u.errors.on(:login)
-    end
-  end
 
   def test_should_require_password
     assert_no_difference 'Person.count' do
@@ -82,45 +70,6 @@ class PersonTest < Test::Unit::TestCase
 
   def test_should_authenticate_person
     assert_equal people(:quentin), Person.authenticate('quentin', 'test')
-  end
-
-  def test_should_set_remember_token
-    people(:quentin).remember_me
-    assert_not_nil people(:quentin).remember_token
-    assert_not_nil people(:quentin).remember_token_expires_at
-  end
-
-  def test_should_unset_remember_token
-    people(:quentin).remember_me
-    assert_not_nil people(:quentin).remember_token
-    people(:quentin).forget_me
-    assert_nil people(:quentin).remember_token
-  end
-
-  def test_should_remember_me_for_one_week
-    before = 1.week.from_now.utc
-    people(:quentin).remember_me_for 1.week
-    after = 1.week.from_now.utc
-    assert_not_nil people(:quentin).remember_token
-    assert_not_nil people(:quentin).remember_token_expires_at
-    assert people(:quentin).remember_token_expires_at.between?(before, after)
-  end
-
-  def test_should_remember_me_until_one_week
-    time = 1.week.from_now.utc
-    people(:quentin).remember_me_until time
-    assert_not_nil people(:quentin).remember_token
-    assert_not_nil people(:quentin).remember_token_expires_at
-    assert_equal people(:quentin).remember_token_expires_at, time
-  end
-
-  def test_should_remember_me_default_two_weeks
-    before = 2.weeks.from_now.utc
-    people(:quentin).remember_me
-    after = 2.weeks.from_now.utc
-    assert_not_nil people(:quentin).remember_token
-    assert_not_nil people(:quentin).remember_token_expires_at
-    assert people(:quentin).remember_token_expires_at.between?(before, after)
   end
 
   def test_should_register_passive_person

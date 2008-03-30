@@ -9,12 +9,17 @@ module AuthenticatedSystem
     # Accesses the current person from the session. 
     # Future calls avoid the database because nil is not equal to false.
     def current_person
-      @current_person ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_person == false
+      @current_person ||= (login_from_session || login_from_basic_auth) unless @current_person == false
     end
 
     # Store the given person id in the session.
     def current_person=(new_person)
       session[:person_id] = new_person ? new_person.id : nil
+      if (new_person)
+        session[:auth_expires] = Time.now + 1.hour unless session[:auth_expires] && session[:auth_expires] > Time.now + 4.hours
+      else
+        session[:auth_expires] = nil
+      end
       @current_person = new_person || false
     end
 
@@ -82,7 +87,8 @@ module AuthenticatedSystem
     # Redirect to the URI stored by the most recent store_location call or
     # to the passed default.
     def redirect_back_or_default(default)
-      redirect_to(session[:return_to] || default)
+      redirect = session[:return_to] || default
+      redirect_to(redirect == "/" ? my_stuff_path : redirect)
       session[:return_to] = nil
     end
 
@@ -94,23 +100,13 @@ module AuthenticatedSystem
 
     # Called from #current_person.  First attempt to login by the person id stored in the session.
     def login_from_session
-      self.current_person = Person.find_by_id(session[:person_id]) if session[:person_id]
+      self.current_person = Person.find_by_id(session[:person_id]) if session[:person_id] && session[:auth_expires] && session[:auth_expires].to_time > Time.now
     end
 
     # Called from #current_person.  Now, attempt to login by basic authentication information.
     def login_from_basic_auth
       authenticate_with_http_basic do |username, password|
         self.current_person = Person.authenticate(username, password)
-      end
-    end
-
-    # Called from #current_person.  Finaly, attempt to login by an expiring token in the cookie.
-    def login_from_cookie
-      person = cookies[:auth_token] && Person.find_by_remember_token(cookies[:auth_token])
-      if person && person.remember_token?
-        person.remember_me
-        cookies[:auth_token] = { :value => person.remember_token, :expires => person.remember_token_expires_at }
-        self.current_person = person
       end
     end
 end

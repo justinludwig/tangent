@@ -25,10 +25,8 @@ class InitialModels < ActiveRecord::Migration
       t.column :salt,                      :string, :limit => 50
       t.column :created_at,                :datetime
       t.column :updated_at,                :datetime
-      t.column :remember_token,            :string, :limit => 50
-      t.column :remember_token_expires_at, :datetime
       t.column :state, :string, :limit => 20, :null => :no, :default => 'passive'
-      t.column :deleted_at, :datetime
+      t.column :deleted_at,                :datetime
     end
 
     create_table :events do |t|

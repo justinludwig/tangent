@@ -23,15 +23,13 @@ ActiveRecord::Schema.define(:version => 1) do
   end
 
   create_table "people", :force => true do |t|
-    t.string   "email",                     :limit => 50
-    t.string   "display_name",              :limit => 50
-    t.string   "crypted_password",          :limit => 50
-    t.string   "salt",                      :limit => 50
+    t.string   "email",            :limit => 50
+    t.string   "display_name",     :limit => 50
+    t.string   "crypted_password", :limit => 50
+    t.string   "salt",             :limit => 50
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "remember_token",            :limit => 50
-    t.datetime "remember_token_expires_at"
-    t.string   "state",                     :limit => 20, :default => "passive"
+    t.string   "state",            :limit => 20, :default => "passive"
     t.datetime "deleted_at"
   end
 

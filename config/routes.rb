@@ -22,6 +22,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :people
   map.resource :session
   
+  map.my_stuff "my", :controller => "my_stuff"
+  
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
