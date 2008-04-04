@@ -24,22 +24,31 @@
 <head>
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title><% if @page_title %><%=h @page_title %> - <% end %>Tangent</title>
+  <%= yui_stylesheet_link_tag %> 
   <%= stylesheet_link_tag :all, :cache => true %> 
-  <%= javascript_include_tag :all, :cache => true %>
+  <%= yui_javascript_include_tag %>
+  <%= javascript_include_tag :all, :cache => true %> 
+  <script type="text/javascript">
+  	App.authenticity_token = "<%= form_authenticity_token -%>";
+  	App.init();
+  </script>
 </head>
-<body>
+<body class="yui-skin-sam">
+<div id="doc3" class="yui-t7">
 
-<div id="head" class="lr-container">
+<div id="hd" class="lr-container">
 
 <span class="l">
     <%= link_to "Tangent", "/" %>
 <% if logged_in? %>
     &nbsp;|&nbsp;
+    <%= link_to_unless_current "Events", events_path %>
+    &nbsp;|&nbsp;
+    <%= link_to_unless_current "People", people_path %>
+    &nbsp;|&nbsp;
     <%= link_to_unless_current "My Stuff", my_stuff_path %>
     &nbsp;|&nbsp;
-    <%= link_to_unless_current "My Profile", current_person %>
-    &nbsp;|&nbsp;
-    <%= link_to_unless_current "Events", "/events" %>
+    <%= link_to_unless_current "My Profile", edit_person_path(current_person) %>
 <% end %>
 </span>
 <span class="r">
@@ -55,7 +64,8 @@
 </span>
 
 </div>
-<div id="flash">
+<div id="bd">
+<div id="flash" class="yui-g">
 
 <% if flash[:notice] %>
   <p class="notice"><%= flash[:notice] %></p>
@@ -66,14 +76,22 @@
 <% end %>
 
 </div>
-<div id="body">
+<div id="body" class="yui-g">
 
 <%= yield  %>
 
 </div>
-<div id="foot">
-
+</div>
+<div id="ft">
 </div>
 
+</div>
+<div id="bottom">
+    <%= link_to_unless_current "About", "/about" %>
+    &nbsp;|&nbsp;
+    <%= link_to_unless_current "Privacy Policy", "/privacy" %>
+    &nbsp;|&nbsp;
+    <%= link_to_unless_current "Feedback", "/feedback" %>
+</div>
 </body>
 </html>

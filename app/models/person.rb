@@ -31,7 +31,7 @@ class Person < ActiveRecord::Base
   validates_confirmation_of :password,                   :if => :password_required?
   before_save :encrypt_password
   validates_presence_of     :display_name
-  validates_length_of       :display_name,:within => 1..50
+  validates_length_of       :display_name,:maximum => 50
   validates_format_of       :display_name,:with => /\S/ 
   
   # prevents a user from submitting a crafted form that bypasses activation

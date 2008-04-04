@@ -19,39 +19,37 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 */
 
 .fieldWithErrors {
-  padding: 2px;
-  background-color: red;
-  display: table;
+  color: #c00;
+}
+input.fieldWithErrors, textarea.fieldWithErrors, select.fieldWithErrors {
+  border-color: #c00;
+}
+
+.fieldErrorMsg {
+  color: #c00;
+  font-weight: bold;
 }
 
 #errorExplanation {
-  width: 400px;
-  border: 2px solid red;
-  padding: 7px;
-  padding-bottom: 12px;
-  margin-bottom: 20px;
-  background-color: #f0f0f0;
+  border: 2px solid #c00;
+  margin: 0.3em;
+  background-color: #eee;
 }
 
 #errorExplanation h2 {
-  text-align: left;
-  font-weight: bold;
-  padding: 5px 5px 5px 15px;
-  font-size: 12px;
-  margin: -7px;
-  background-color: #c00;
+  margin: 0;
+  padding: 0.3em 1em;
   color: #fff;
+  background-color: #c00;
+  font-size: 1em;
 }
 
 #errorExplanation p {
-  color: #333;
-  margin-bottom: 0;
-  padding: 5px;
+  padding: 0.3em 1em 0 1em;
 }
 
-#errorExplanation ul li {
-  font-size: 12px;
-  list-style: square;
+#errorExplanation ul {
+  margin-bottom: 1em;
 }
 
 div.uploadStatus {

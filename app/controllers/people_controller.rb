@@ -94,6 +94,7 @@ class PeopleController < ApplicationController
         format.html { redirect_back_or_default(@person) }
         format.xml  { render :xml => @person, :status => :created, :location => @person }
       else
+        @register = true if !self.current_person
         format.html { render :action => "new" }
         format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
       end
@@ -145,6 +146,32 @@ class PeopleController < ApplicationController
       format.html { redirect_to(people_url) }
       format.xml  { head :ok }
     end
+  end
+
+  # GET /people/1/email
+  # GET /people/1/email.xml
+  def email
+    # todo create email.html.erb
+    @person = Person.find(params[:id])
+  end
+  
+  # POST /people/1/send_email
+  # POST /people/1/send_email.xml
+  def send_email
+    @person = Person.find(params[:id])
+=begin
+    respond_to do |format|
+      # todo
+      if PersonMailer.deliver_personal_email(person, current_person, subject, body)
+        flash[:notice] = 'Your email was sent.'
+        format.html { redirect_to(@person) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "email" }
+        format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+      end
+    end
+=end
   end
 
 end

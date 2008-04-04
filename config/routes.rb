@@ -19,7 +19,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :events
 
-  map.resources :people
+  map.resources :people, :member => { :email => :get, :send_email => :post }
   map.resource :session
   
   map.my_stuff "my", :controller => "my_stuff"

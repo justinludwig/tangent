@@ -1,4 +1,3 @@
-<%
 ## Tangent, an online sign-up sheet
 ## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
 ## 
@@ -16,36 +15,21 @@
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
--%>
 
-<% @page_title = "People" %>
-
-<h1>People</h1>
-
-<table class="tbl">
-<thead>
-  <tr>
-    <th>Email</th>
-    <th>Display name</th>
-    <th>State</th>
-	<th class="tools">&nbsp;</th>
-  </tr>
-</thead>
-<tbody>
-<% for person in @people %>
-  <tr class="<%= cycle("", "alt") -%>">
-    <td><%= link_to h(person.email), person %></td>
-    <td><%= link_to h(person.display_name), person %></td>
-    <td><%=h person.state %></td>
-    <td class="tools">
-      <%= link_to titled_image_tag("silk/page_edit.png", :alt => "Edit"), edit_person_path(person) %>
-	  <%= link_to_delete person %>
-	</td>
-  </tr>
-<% end %>
-</tbody>
-</table>
-
-<div class="buttons">
-<%= styled_button_to 'Create', new_person_path, :method => "get", :style => "width:6em;" %>
-</div>
+# extend field-level error display
+# to set fieldWithErrors class on field
+# instead of wrapping field with extra div
+# and to add fieldErrorMsg with error msg following field
+ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
+    msg = instance.error_message
+    msg = msg.join "; " if msg && msg.respond_to?(:join)
+  
+    if html_tag =~ /<(?:input|textarea|select|label)[^>]*?class=["']/
+      html_tag = "#{$&}#{$`}fieldWithErrors #{$'}";
+    else
+      html_tag.sub(/<(?:input|textarea|select|label)/, "#{$&} class=\"fieldWithErrors\"")
+    end
+    
+    html_tag << " <span class=\"fieldErrorMsg\">#{msg}</span> " if msg && html_tag !~ /<label/
+    html_tag
+end

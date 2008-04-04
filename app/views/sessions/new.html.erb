@@ -20,15 +20,14 @@
 
 <% @page_title = "Login" %>
 
-<% form_tag session_path do -%>
-<p><label for="login">Email</label><br/>
-<%= text_field_tag 'login' %></p>
+<h1>Login</h1>
+<p>New to Tangent? <%= link_to "Register", new_person_path %></p>
 
-<p><label for="password">Password</label><br/>
-<%= password_field_tag 'password' %></p>
+<% form_tag session_path do %>
 
-<p><label for="remember_me">Remember me:</label>
-<%= check_box_tag 'remember_me' %></p>
+<%= property_line_tag text_field_tag("login", nil, :class=> "medium"), "login", :label => "Email" %>
+<%= property_line_tag password_field_tag("password", nil, :class => "medium"), "password", :description => link_to("I Forgot", "/forgot_password") %>
+<%= property_line_tag labeled_check_box_tag("remember_me", nil, false), "remember_me", :label => :none %>
+<%= property_line_tag styled_submit_tag("Log in", :style => "width:6em;"), "submit", :label => :none %>
 
-<p><%= submit_tag 'Log in' %></p>
-<% end -%>
+<% end %>

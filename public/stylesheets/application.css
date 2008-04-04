@@ -20,25 +20,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 /* general */
 
-* {
-    font-size: 100%;
-}
-
-body, address, blockquote, center, del, div, h1, h2, h3, h4, h5, h6, ins, p, pre, dl, dt, dd, li, ol, ul, table, caption, thead, tfoot, tbody, tr, td, th, form, fieldset, legend, label, a, applet, br, iframe, img, object, q, span, sub, sup, abbr, acronym, cite, code, dfn, em, kdb, samp, strong, var {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-weight: inherit;
-    font-style: inherit;
-}
-
 body, textarea {
     font-family: tahoma, sans-serif;
 }
 body {
     color: #333;
     background-color: #fff;
-    font-size: 0.85em;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -49,10 +36,10 @@ h1 {
     font-size: 2.0em;
 }
 h2 {
-    font-size: 1.7em;
+    font-size: 1.6em;
 }
 h3 {
-    font-size: 1.4em;
+    font-size: 1.3em;
 }
 h4 {
     font-size: 1.1em;
@@ -158,8 +145,14 @@ dd {
     font-size: 0.9em;
 }
 ol, ul {
-    margin: 0.3em 1em;
+    margin: 0.3em 2em;
     list-style-position: inside;
+}
+ol li { 
+    list-style: decimal;     
+}
+ul li { 
+    list-style: disc; 
 }
 
 fieldset {
@@ -178,7 +171,7 @@ label {
 }
 
 button {
-    margin-right: 0.2em;
+    margin-left: 0.2em;
     text-align: center;
 }
 button, select, option {
@@ -224,6 +217,19 @@ small {
 
 /* forms */
 
+.long {
+    width: 40em;
+}
+.medium {
+    width: 20em;
+}
+.short {
+    width: 10em;
+}
+.number {
+    width: 4em;
+}
+
 .property {
     padding: 0.3em 0.5em;
 }
@@ -241,8 +247,12 @@ small {
     font-size: 0.9em
 }
 
+label.checkbox, label.radio {
+    cursor: pointer;
+}
+
 .buttons {
-    padding: 0.3em 1em;
+    padding: 0.3em 0;
     text-align: right;
 }
 
@@ -255,6 +265,10 @@ small {
 }
 
 /* panels */
+
+.bd {
+    text-align: left;
+}
 
 .lr-container {
     position: relative;
@@ -271,36 +285,62 @@ small {
     right: 0;
 }
 
+/* dialogs */
+
+#alert button, #confirm button, #prompt button {
+    width: 6em;
+}
+
 /* page */
 
-#head, #foot, #flash p, #body {
-	margin: 0;
-    padding: 0.3em 1em;
+/* footerstick */
+html, body {
+    height: 100%;
+}
+#doc3 {
+    min-width: 0;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0;
+    margin-bottom: -2em;
 }
 
-#head {
+#hd, #ft, #bd, #bottom {
+    padding: 0 1em;
+}
+
+#hd {
+    height: 2em;
     color: #fff;
     background-color: #036;
+    line-height: 2em;
 }
-#head a {
+#hd a {
     color: #eef;
 }
-#head a:visited {
+#hd a:visited {
     color: #fef;
 }
-#head .r {
-    top: 0.3em;
+#hd .r {
     right: 1em;
 }
 
-/*
-#foot {
-    background-color: #eee;
+#bd {
+    padding: 0.3em 1em;
 }
-*/
 
 #flash {
     font-size: 1.2em;
     font-weight: bold;
+}
+
+/* footerstick */
+#ft, #bottom {
+    height: 2em;
+}
+#bottom {
+    background-color: #eee;
+    line-height: 2em;
 }
 

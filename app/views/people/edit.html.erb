@@ -18,37 +18,29 @@
 ## 02110-1301, USA.
 -%>
 
-<% @page_title = "Edit " << @person.display_name %>
+<% if @person == current_person %>
+    <% @page_title = "My Profile" %>
+    <h1>My Profile</h1>
 
-<h1>Editing person</h1>
+<% else %>
+    <% @page_title = "Edit " << @person.display_name %>
+    <h1>Edit <%=h @person.display_name %></h1>
+<% end %>
+
+<p><%= link_to 'View Public Profile Page', @person %></p>
 
 <%= error_messages_for :person %>
 
-<% form_for(@person) do |f| %>
-  <p>
-    <b>Email</b><br />
-    <%= f.text_field :email %>
-  </p>
+<% form_for(@person, :builder => ApplicationFormBuilder) do |f| %>
 
-  <p>
-    <b>Password</b><br />
-    <%= f.text_field :password %>
-  </p>
+<%= f.property_line :text_field, :display_name, :required => true %>
+<%= f.property_line :text_field, :email, :required => true %>
+<%= f.property_line :password_field, :password, :description => "at least 8 characters (leave blank unless changing)" %>
+<%= f.property_line :password_field, :password_confirmation, :description => "must match password" %>
 
-  <p>
-    <b>Password confirmation</b><br />
-    <%= f.text_field :password_confirmation %>
-  </p>
+<div class="buttons">
+    <%= f.styled_submit "Update", :style => "width:6em;" %>
+    <%= styled_button_to_back "Cancel", :style => "width:6em;" %>
+</div>
 
-  <p>
-    <b>Display name</b><br />
-    <%= f.text_field :display_name %>
-  </p>
-
-  <p>
-    <%= f.submit "Update" %>
-  </p>
 <% end %>
-
-<%= link_to 'Show', @person %> |
-<%= link_to 'Back', people_path %>

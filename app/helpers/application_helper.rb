@@ -18,4 +18,108 @@
 
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  
+  PUSH_BUTTON_HTML = 
+    '<span class="yui-button yui-push-button"><span class="first-child"><button\1\3>\2</button></span></span>'
+
+  def yui_stylesheet_link_tag
+    stylesheet_link_tag(
+      "http://yui.yahooapis.com/2.5.1/build/reset-fonts-grids/reset-fonts-grids.css",
+      "http://yui.yahooapis.com/2.5.1/build/assets/skins/sam/skin.css" 
+    )
+  end
+
+  def yui_javascript_include_tag
+    javascript_include_tag(
+      "http://yui.yahooapis.com/2.5.1/build/yuiloader/yuiloader-beta-min.js",
+      "http://yui.yahooapis.com/2.5.1/build/event/event-min.js"
+    )
+  end
+  
+  def property_line_tag(text, id, options = {})
+    required = options[:required]
+    css = (required ? "property required" : "property")
+    
+    label = options[:label]
+    if label == :none
+      escape_label = true
+      label = "&nbsp;"
+      id = nil
+    else
+      label = id.humanize unless label
+    end
+
+    description = options[:description]
+    description = (description ? "required; " + description : "required") if required
+    
+    html = "<div class=\"#{css}\">\n"
+    html << content_tag("label", label, { :for => id, :class => "property-label" }, escape_label) << "\n"
+    html << "<span class=\"property-value\">#{text}</span>\n"
+    html << "<span class=\"property-description\">#{description}</span>\n" if description
+    html << "</div>\n"
+  end
+  
+  def text_tag(value, options = {})
+    content_tag "span", value, options
+  end
+  
+  def labeled_check_box_tag(name, label, checked, options = {})
+    id = options[:id] ? options[:id] : name
+    label = name.humanize unless label
+    
+    css = options.delete(:class)
+    css = css ? "checkbox #{css}" : "checkbox"
+    
+    content_tag(
+      "label",
+      check_box_tag(name, nil, checked, options) << " " << label,
+      :for => id,
+      :class => css
+    )
+  end
+  
+  def styled_button_to(name, options = {}, html_options = {})
+    button_to(name, options, html_options).sub(
+      /<input([^>]*?type="submit"[^>]*?)value="([^>]*?)"([^>]*?)\/>/,
+      PUSH_BUTTON_HTML
+    )
+  end
+  
+  def styled_button_to_function(name, onclick, options = {})
+    button_to_function(name, onclick, options).sub(
+      /<input([^>]*?)value="([^>]*?)"([^>]*?)\/>/,
+      PUSH_BUTTON_HTML
+    )
+  end
+  
+  def styled_button_to_back(name, options = {})
+    styled_button_to_function name, "history.back()", options
+  end
+  
+  def styled_submit_tag(value = "Submit", options = {})
+    submit_tag(value, options).sub(
+      /<input([^>]*?)value="([^>]*?)"([^>]*?)\/>/,
+      PUSH_BUTTON_HTML
+    )
+  end
+  
+  def titled_image_tag(source, options = {})
+    options[:title] = options[:alt] unless options[:title]
+    image_tag source, options
+  end
+  
+  def confirmed_image_link_to(url, method, icon, alt, msg, title)
+      link_to_function(
+        titled_image_tag(icon, :alt => alt),
+        "App.confirm('#{msg}', { text: '#{alt}', handler: function() { App.controllerRequest('#{method}', '#{url}') } }, null, '#{title}');",
+        :href => url
+      )
+  end
+  
+  def link_to_delete(model)
+      type = model.class.table_name.humanize.downcase.singularize
+      msg = "Are you sure you want to delete this #{type}?"
+      confirmed_image_link_to url_for(model), "delete", "silk/cross.png", "Delete", msg, "Confirm Delete"
+  end
+  
 end

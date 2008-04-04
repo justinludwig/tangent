@@ -20,26 +20,13 @@
 
 <% @page_title = @person.display_name %>
 
-<p>
-  <b>Email:</b>
-  <%=h @person.email %>
-</p>
+<h1><%=h @person.display_name %></h1>
 
-<p>
-  <b>Password:</b>
-  <%=h @person.password %>
-</p>
+<p><%= link_to "Email #{h(@person.display_name)}", email_person_path(@person) %></p>
 
-<p>
-  <b>Password confirmation:</b>
-  <%=h @person.password_confirmation %>
-</p>
+<% fields_for(@person, :builder => ApplicationFormBuilder) do |f| %>
 
-<p>
-  <b>Display name:</b>
-  <%=h @person.display_name %>
-</p>
+<%= f.property_line :text, :display_name %>
+<%= f.property_line :text, :state %>
 
-
-<%= link_to 'Edit', edit_person_path(@person) %> |
-<%= link_to 'Back', people_path %>
+<% end %>

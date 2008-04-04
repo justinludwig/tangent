@@ -17,7 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 
-This program also includes software authored by the following people:
+This program also includes software and content authored by the following people:
 
 * David Heinemeier Hansson
   - ruby-on-rails (http://rubyonrails.org/)
@@ -27,5 +27,10 @@ This program also includes software authored by the following people:
   - acts_as_state_machine plugin (http://elitists.textdriven.com/svn/plugins/acts_as_state_machine)
 * Paweł Stradomski
   - sliding_sessions plugin (http://squarewheel.wordpress.com/2007/11/03/session-cookie-expiration-time-in-rails/)
+* Yahoo
+  - yui javascript library (http://developer.yahoo.com/yui/)
+* Mark James
+  - silk icons (http://www.famfamfam.com/lab/icons/silk/)
+
 
 

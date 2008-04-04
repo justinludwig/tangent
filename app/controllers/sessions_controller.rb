@@ -52,6 +52,7 @@ class SessionsController < ApplicationController
       
       redirect_back_or_default('/')
     else
+      flash[:error] = "Email or password does not match a registered person."
       render :action => 'new'
     end
   end
