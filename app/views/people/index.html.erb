@@ -25,9 +25,9 @@
 <table class="tbl">
 <thead>
   <tr>
-    <th>Email</th>
-    <th>Display name</th>
-    <th>State</th>
+    <th><%= link_to_order_by "Email", "email" %></th>
+    <th><%= link_to_order_by "Display name", "display_name" %></th>
+    <th><%= link_to_order_by "State", "state" %></th>
 	<th class="tools">&nbsp;</th>
   </tr>
 </thead>
@@ -45,6 +45,7 @@
 <% end %>
 </tbody>
 </table>
+<%= links_to_page @people %>
 
 <div class="buttons">
 <%= styled_button_to 'Create', new_person_path, :method => "get", :style => "width:6em;" %>

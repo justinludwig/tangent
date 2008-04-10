@@ -116,15 +116,6 @@ fieldset .tbl {
 .tbl .alt {
     background-color: #f4f4f4;
 }
-.tbl .old {
-    color: #777;
-}
-.tbl .old a {
-    color: #77c;
-}
-.tbl .old a:visited {
-    color: #c7c;
-}
 .tbl .primary td {
     border-bottom: 0;
 }
@@ -265,6 +256,29 @@ label.checkbox, label.radio {
 }
 
 /* panels */
+
+.pagination {
+    padding: 0.5em;
+    text-align: center;
+}
+.pagination span,
+.pagination a {
+    padding: 0.2em 0.4em;
+}
+.pagination .current {
+    font-weight: bold;
+}
+.pagination .disabled {
+    color: #666;
+}
+.pagination .prev_page {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.pagination .next_page {
+    padding-left: 1em;
+    padding-right: 3em;
+}
 
 .bd {
     text-align: left;

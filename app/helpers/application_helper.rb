@@ -121,5 +121,29 @@ module ApplicationHelper
       msg = "Are you sure you want to delete this #{type}?"
       confirmed_image_link_to url_for(model), "delete", "silk/cross.png", "Delete", msg, "Confirm Delete"
   end
+
+  def links_to_page(model)
+    will_paginate model
+  end
+
+  def link_to_order_by(text, order, ascending = true)
+      # determine current order and ascending
+      current_order = params[:order] || ''
+      current_ascending = current_order !~ /-$|DESC$/
+      current_order = current_order.sub /([a-z_]+)(.*)/, '\1'
+      current = true if order == current_order
+
+      # if current, reverse ascending
+      order << '-' if (current ? current_ascending : !ascending)
+
+      # create link with order, preserving existing GET params
+      options = { :order => order }
+      options = params.merge(options) if request.get?
+      html = link_to text, options
+
+      # add up/down arrow if current
+      html << titled_image_tag((current_ascending ? 'silk/bullet_arrow_up.png' : 'silk/bullet_arrow_down.png'), :alt => (current_ascending ? 'Ascending' : 'Descending')) if current
+      html
+  end
   
 end

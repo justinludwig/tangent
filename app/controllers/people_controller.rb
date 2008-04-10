@@ -22,7 +22,7 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.xml
   def index
-    @people = Person.find(:all)
+    @people = Person.paginate :all, :page => requested_page, :order => requested_order, :per_page => requested_per_page
 
     respond_to do |format|
       format.html # index.html.erb

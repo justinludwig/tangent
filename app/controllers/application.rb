@@ -31,4 +31,34 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '51b7778c2d93981d22553fb1b9a42684'
+
+  def requested_page(default = 1)
+    page = (params[:page] ? params[:page].to_i : default)
+    page = default if page < 1
+    page
+  end
+
+  def requested_per_page(default = 10, max = 100)
+    per_page = (params[:per_page] ? params[:per_page].to_i : default)
+    per_page = default if per_page < 1
+    per_page = max if per_page > max
+    per_page
+  end
+
+  def requested_order(default = 'id')
+    order = params[:order]
+    if order
+      # convert "display_name+" to "display_name"
+      # convert "display_name-" to "display_name DESC"
+      order = order.sub(/\+$/, '').sub(/-$/, ' DESC')
+    end
+    # must be either "display_name ASC" or "display_name DESC"
+    order = default unless order =~ /^[a-z_]+(?: ASC| DESC)?$/
+    order
+  end
+
+  def requested_query(default = nil)
+    params[:q] || default
+  end
+
 end
