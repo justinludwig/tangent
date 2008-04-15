@@ -41,7 +41,7 @@ class SessionsController < ApplicationController
   def create
     self.current_person = Person.authenticate(params[:login], params[:password])
     if logged_in?
-      session[:auth_expires] = Time.now + REMEMBER_ME_EXPIRES if params[:remember_me] == "1"
+      session[:auth_expires] = Time.now + REMEMBER_ME_EXPIRES if params[:remember_me]
       flash[:notice] = "Welcome back, #{current_person.display_name}!"
       
       js_name = javascript_helper.escape_javascript(current_person.display_name)
