@@ -1,30 +1,55 @@
-<h1>Listing events</h1>
+<%
+## Tangent, an online sign-up sheet
+## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
+## 
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+## 02110-1301, USA.
+-%>
 
-<table>
+<% @page_title = "Events" %>
+
+<h1>Events</h1>
+
+<table class="tbl">
+<thead>
   <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Details</th>
-    <th>Start-date</th>
-    <th>End-date</th>
+    <th><%= link_to_order_by "Name", "name" %></th>
+    <th><%= link_to_order_by "Description", "description" %></th>
+    <th><%= link_to_order_by "Start", "start_date" %></th>
+    <th><%= link_to_order_by "End", "end_date" %></th>
     <th>Tags</th>
+	<th class="tools">&nbsp;</th>
   </tr>
-
+</thead>
+<tbody>
 <% for event in @events %>
-  <tr>
-    <td><%=h event.name %></td>
+  <tr class="<%= cycle("", "alt") -%>">
+    <td><%= link_to h(event.name), event %></td>
     <td><%=h event.description %></td>
-    <td><%=h event.details %></td>
-    <td><%=h event.start_date %></td>
-    <td><%=h event.end_date %></td>
+    <td><%= list_datetime event.start_date %></td>
+    <td><%= list_datetime event.end_date %></td>
     <td><%=h event.tags %></td>
-    <td><%= link_to 'Show', event %></td>
-    <td><%= link_to 'Edit', edit_event_path(event) %></td>
-    <td><%= link_to 'Destroy', event, :confirm => 'Are you sure?', :method => :delete %></td>
+    <td class="tools">
+      <%= link_to titled_image_tag("silk/page_edit.png", :alt => "Edit"), edit_event_path(event) %>
+	  <%= link_to_delete event %>
+    </td>
   </tr>
 <% end %>
 </table>
+<%= links_to_page @events %>
 
-<br />
-
-<%= link_to 'New event', new_event_path %>
+<div class="buttons">
+<%= styled_button_to 'Create', new_event_path, :method => "get", :style => "width:6em;" %>
+</div>

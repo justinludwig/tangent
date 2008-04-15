@@ -18,6 +18,9 @@
 
 var App = {
 
+/** App context-path, such as "/tangent". */
+contextPath: "",
+
 /**
  * Init app javascript.
  */
@@ -25,21 +28,18 @@ init: function() {
     var loader = new YAHOO.util.YUILoader({
         loadOptional: true,
         onSuccess: function() {
-            /*
-            // move non-yui css files (those without an id) below yui css (giving non-yui greater precedence)
-            var head = document.getElementsByTagName("head")[0];
-            var links = [];
-            for (var i = 0, e, elements = head.getElementsByTagName("link"); e = elements[i]; i++)
-                if (!e.id)
-                    links.push(e);
-            for (var i = 0, e; e = links[i]; i++)
-                head.appendChild(e);
-            */
+            // alias YAHOO.util.Dom.get
+            if (typeof($) == "undefined")
+                window.$ = YAHOO.util.Dom.get;
 
             YAHOO.util.Event.onDOMReady(function() {
                 // init yui-push-buttons
                 for (var i = 0, e, elements = YAHOO.util.Selector.query("span.yui-push-button"); e = elements[i]; i++)
                     new YAHOO.widget.Button(e);
+
+                // init date-time inputs
+                for (var i = 0, e, elements = YAHOO.util.Selector.query("span.datetime-input"); e = elements[i]; i++)
+                    App.Cal.convert(e);
             });
 
             App.inited = true;
@@ -120,7 +120,7 @@ controllerRequest: function(method, url, params) {
  * Focuses the first input field in the specified element.
  */
 focusFirstInput: function(form) {
-    form = $y(form);
+    form = $(form);
 
     function focus(e) {
         try {
@@ -157,6 +157,118 @@ focusFirstInput: function(form) {
         focusInputType(/button|submit|image|reset/)
     );
     return form;
+},
+
+/**
+ * Creates the specified element.
+ * @param tag Element tag name ("span").
+ * @param attrs (optional) Map of element attributes ({ id: "foo", "class": "bar }).
+ * @param text (optional) Element text content.
+ * @param unescaped (optional) True if specified text content shouldn't be escaped. 
+ * @return New element.
+ */
+createElement: function(tag, attrs, text, dontEscape) {
+    var e = document.createElement(tag);
+    for (var i in attrs)
+        App.setAttribute(e, i, attrs[i]);
+
+    if (text) {
+        if (dontEscape)
+            e.innerHTML = text;
+        else
+            e.appendChild(document.createTextNode(text));
+    }
+
+    return e;
+},
+
+/**
+ * Gets the specified element attribute as a string value.
+ * Fixes ie's non-standard getAttribute() behavior.
+ * @param element Element object.
+ * @param qname Attribute name.
+ * @param ns (optional) Attribute namespace.
+ * @param localname (optional) Attribute local name.
+ * @return String attribute value or "".
+ */
+getAttribute: function(element, qname, ns, localname) {
+    if (qname == "class")
+        return element.className;
+    if (qname == "style")
+        return element.style.cssText;
+
+    if (ns && element.getAttributeNS) {
+        var value = element.getAttributeNS(ns, localname);
+    } else try {
+        value = element.getAttribute(qname);
+    } catch (e) {
+        // ie doesn't like prefixed attributes on certain element types
+        value = element.getAttribute(qname.replace(/:/, "."));
+    }
+    return String(value || "");
+},
+
+/**
+ * Sets the specified element attribute as a string value.
+ * Fixes ie's non-standard setAttribute() behavior.
+ * @param element Element object.
+ * @param qname Attribute name.
+ * @param value String attribute value.
+ * @param ns (optional) Attribute namespace.
+ * @param localname (optional) Attribute local name.
+ */
+setAttribute: function(element, qname, value, ns, localname) {
+    var useNS = ns && element.getAttributeNS;
+
+    // special attributes
+    if (qname == "class") {
+        element.className = value || "";
+        return;
+    }
+    if (qname == "style") {
+        element.style.cssText = value || "";
+        return;
+    }
+    // remove instead of setting to null
+    if (value == null) {
+        if (useNS)
+            element.removeAttributeNS(ns, localname);
+        else try {
+            element.removeAttribute(qname);
+        } catch (e) {
+            // ie doesn't like prefixed attributes on certain element types
+            element.removeAttribute(qname.replace(/:/, "."));
+        }
+        return;
+    }
+
+    var oldValue;
+    if (useNS) {
+        oldValue = element.getAttributeNS(ns, localname);
+    } else try {
+        oldValue = element.getAttribute(qname);
+    } catch (e) {
+        // ie doesn't like prefixed attributes on certain element types
+        oldValue = element.getAttribute(qname.replace(/:/, "."));
+    }
+
+    // cast to appropriate type for ie
+    var type = typeof(oldValue);
+    if (type == "boolean")
+        value = (value && !/false/i.test(value))
+    else if (type == "number")
+        value = Number(value);
+
+    if (value == oldValue)
+        return;
+
+    if (useNS) {
+        element.setAttributeNS(ns, qname, value);
+    } else try {
+        element.setAttribute(qname, value);
+    } catch (e) {
+        element.setAttribute(qname.replace(/:/, "."), value);
+    }
 },
 
 /**
@@ -339,8 +451,192 @@ prompt: function(msg, dflt, ok, cancel, title, input) {
 
 }; // end App
 
-/** Alias for new YAHOO.util.Element. */
-var $y = function(e) {
-    return new YAHOO.util.Element(e);
-};
+/** Date-picker functionality. */
+App.Cal = {
+
+/**
+ * Converts a plain-jane text input into a fancy date-time picker.
+ * @param element Span surrounding the text input.
+ */
+convert: function(element) {
+    element = $(element);
+    var input = element.getElementsByTagName("input")[0];
+    var id = input.id, hiddenId = id + "__hidden";
+    // skip if already converted
+    if ($(hiddenId)) return;
+
+    // adjust UTC date to browser timezone, format as pretty date
+    var date = Date.parse(input.value);
+    if (date) {
+        var tz = date.getTimezoneOffset();
+        if (tz)
+            date.addMinutes(-tz);
+        input.value = date.toShortDateString() + " " + date.toShortTimeString();
+    }
+
+    // remove input name, add to hidden input
+    var name = input.name;
+    input.name = null;
+    element.appendChild(App.createElement("input", {
+        id: hiddenId,
+        type: "hidden",
+        name: name
+    }));
+
+    /*
+    var abbr = YAHOO.lang.trim((new Date().toString().match(/([^\d()-+:\/]+)[\s\d()-+:\/]*$/)||["",""])[1].replace(/^\s*[AP]M\s/, ""));
+    if (!abbr)
+        abbr = "UTC" + new Date().getUTCOffset();
+    element.appendChild(App.createElement("span", {
+        id: id + "__timezone",
+        "class": "timezone"
+    }, abbr));
+    */
+
+    // add calendar popup
+    element.appendChild(App.createElement("a", {
+        id: id + "__calendar",
+        href: "javascript:App.Cal.show('" + id + "','" + id + "__calendar')",
+        "class": "calendar"
+    })).appendChild(App.createElement("img", {
+        src: App.contextPath + "/images/silk/calendar.png",
+        alt: "Select Date",
+        title: "Select Date"
+    }));
+
+    // add parsed result display
+    element.appendChild(App.createElement("span", {
+        id: id + "__display",
+        "class": "display"
+    }));
+
+    // update hidden input and result display
+    App.Cal.update(input);
+
+    // create popup calendar (delay a little cause we don't need right away)
+    setTimeout(function() {
+        var containerId = id + "__calendar_container";
+        element.appendChild(App.createElement("div", {
+            id: containerId,
+            "class": "calendar-container"
+        }));
+        
+        var calendar = App[id + "__calendar"] = new YAHOO.widget.Calendar(containerId, {
+            close: true,
+            navigator: true,
+            pagedate: (date ? date.toString("MM/yyyy") : ""),
+            selected: (date ? date.toString("MM/dd/yyyy") : ""),
+            title: "Select Date"
+        });
+        calendar.render();
+
+        calendar.selectEvent.subscribe(App.Cal.select, input);
+    }, 1000);
+
+    // register events
+    // keydown instead of keypress cause ie fires keypress only for alphanumeric keys
+    YAHOO.util.Event.on(input, "keydown", App.Cal.keypress);
+},
+
+/** Timer object from YAHOO.lang.later. */
+lastKeypress: {
+    cancel: function() {}
+},
+
+/**
+ * Handles keypress event in date-picker input.
+ */
+keypress: function(event) {
+    App.Cal.lastKeypress.cancel();
+    App.Cal.lastKeypress = YAHOO.lang.later(300, this, App.Cal.update);
+},
+
+/**
+ * Handles select event on calendar popup.
+ */
+select: function(type, args, input) {
+    // hide the calendar
+    var calendar = App[input.id + "__calendar"];
+    if (calendar) {
+        // skip when updated via text input
+        if (calendar.supressNextSelect) {
+            delete calendar.supressNextSelect;
+            return;
+        }
+        calendar.hide();
+    }
+
+    var selected = args[0][0];
+
+    // convert calendar popup's array to date object
+    var date = Date.parse(input.value) || new Date();
+    date.setFullYear(selected[0]);
+    date.setMonth(selected[1] - 1);
+    date.setDate(selected[2]);
+
+    // ignore if date is same as current value
+    var value = date.toShortDateString() + " " + date.toShortTimeString();
+    if (input.value == value) return;
+
+    input.value = value;
+    App.Cal.update(input);
+},
+
+/**
+ * Updates the specified date picker.
+ * @param input The original date-picker input.
+ */
+update: function(input) {
+    input = $(input) || this;
+    var id = input.id;
+    var date = Date.parse(input.value) || "";
+
+    // calculate timezone abbreviation
+    if (!App.Cal.abbr) {
+        App.Cal.abbr = YAHOO.lang.trim((new Date().toString().match(/([^\d()-+:\/]+)[\s\d()-+:\/]*$/)||["",""])[1].replace(/^\s*[AP]M\s/, ""));
+        if (!App.Cal.abbr)
+            App.Cal.abbr = "UTC" + new Date().getUTCOffset();
+    }
+
+    // update hidden input
+    var hidden = $(id + "__hidden");
+    if (hidden)
+        hidden.value = (date ? date.toISOString() : "");
+
+    // update parsed result display
+    var display = $(id + "__display");
+    if (display)
+        display.innerHTML = (date ? date.toLongDateString() + " " + date.toShortTimeString() + " " + App.Cal.abbr : "No Date");
+
+    // update calendar popup
+    var calendar = App[id + "__calendar"];
+    if (calendar) {
+        calendar.supressNextSelect = true;
+        calendar.select(date);
+        if (date)
+            calendar.cfg.setProperty("pagedate", date.toString("MM/yyyy")); 
+        calendar.render();
+    }
+},
+
+/**
+ * Shows the calendar for the specified date-picker input.
+ */
+show: function(input, near) {
+    input = $(input)
+    near = $(near) || input;
+    var id = input.id
+    var container = $(id + "__calendar_container");
+    if (container) {
+        var xy = YAHOO.util.Dom.getXY(near);
+        container.style.left = xy[0] + "px";
+        container.style.top = (xy[1] + near.offsetHeight) + "px";
+    }
+
+    var calendar = App[id + "__calendar"];
+    if (calendar)
+        calendar.show();
+}
+
+}; // end Cal
 

@@ -18,6 +18,7 @@
 
 class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::AssetTagHelper
   include ActionView::Helpers::FormTagHelper
   include ApplicationHelper
   
@@ -32,12 +33,22 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     text = send(type, method, options)
     
     pl_options[:label] = method.to_s.humanize unless pl_options[:label]
-    property_line_tag(text, "#{@object_name}_#{method}", pl_options)
+    property_line_tag text, field_id(method), pl_options
   end
   
   def text(method, options = {})
-    options[:id] = "#{@object_name}_#{method}" unless options[:id]
+    options[:id] = field_id(method) unless options[:id]
     text_tag @object.send(method), options
+  end
+
+  def datetime(method, options = {})
+    options[:id] = field_id(method) unless options[:id]
+    value = formatted_datetime @object.send(method)
+    text_tag value, options
+  end
+
+  def datetime_input(method, options = {})
+    content_tag 'span', text_field(method, options), :class => 'datetime-input'
   end
   
   def labeled_check_box(method, options = {})
@@ -53,5 +64,15 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
   def styled_submit(value = "Submit", options = {})
     styled_submit_tag value, options
   end
+
+  protected
+
+    def field_id(method)
+      "#{@object_name}_#{method}"
+    end
+
+    def field_name(method)
+      "#{@object_name}[#{method}]"
+    end
   
 end

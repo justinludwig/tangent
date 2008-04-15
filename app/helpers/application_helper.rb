@@ -22,6 +22,8 @@ module ApplicationHelper
   PUSH_BUTTON_HTML = 
     '<span class="yui-button yui-push-button"><span class="first-child"><button\1\3>\2</button></span></span>'
 
+  # head tags
+
   def yui_stylesheet_link_tag
     stylesheet_link_tag(
       "http://yui.yahooapis.com/2.5.1/build/reset-fonts-grids/reset-fonts-grids.css",
@@ -35,6 +37,8 @@ module ApplicationHelper
       "http://yui.yahooapis.com/2.5.1/build/event/event-min.js"
     )
   end
+
+  # form input tags
   
   def property_line_tag(text, id, options = {})
     required = options[:required]
@@ -77,6 +81,12 @@ module ApplicationHelper
       :class => css
     )
   end
+
+  def datetime_input_tag(name, value, options = {})
+    content_tag 'span', text_field_tag(name, value, options), :class => 'datetime-input'
+  end
+
+  # button tags
   
   def styled_button_to(name, options = {}, html_options = {})
     button_to(name, options, html_options).sub(
@@ -102,6 +112,8 @@ module ApplicationHelper
       PUSH_BUTTON_HTML
     )
   end
+
+  # link tags
   
   def titled_image_tag(source, options = {})
     options[:title] = options[:alt] unless options[:title]
@@ -145,5 +157,19 @@ module ApplicationHelper
       html << titled_image_tag((current_ascending ? 'silk/bullet_arrow_up.png' : 'silk/bullet_arrow_down.png'), :alt => (current_ascending ? 'Ascending' : 'Descending')) if current
       html
   end
+
+  # output tags
   
+  def formatted_datetime(date)
+    return "" unless date
+    date = TimeZone.default.adjust date
+    date.strftime '%A, %B %e, %Y at %l:%M %p ' << TimeZone.default.name
+  end
+  
+  def list_datetime(date)
+    return "" unless date
+    date = TimeZone.default.adjust date
+    date.strftime '%m/%d/%Y %I:%M %p'
+  end
+
 end

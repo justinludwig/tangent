@@ -223,6 +223,7 @@ small {
 
 .property {
     padding: 0.3em 0.5em;
+    clear: both;
 }
 .property .property-label {
     float: left;
@@ -300,6 +301,22 @@ label.checkbox, label.radio {
 }
 
 /* dialogs */
+
+.datetime-input {
+    display: block;
+    float: left;
+}
+.datetime-input .calendar-container {
+    display: none;
+    position: absolute;
+}
+.datetime-input .calendar {
+    padding-right: 0.5em;
+}
+.datetime-input .display {
+    display: block;
+    font-style: italic;
+}
 
 #alert button, #confirm button, #prompt button {
     width: 6em;

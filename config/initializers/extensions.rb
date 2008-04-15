@@ -33,3 +33,12 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag << " <span class=\"fieldErrorMsg\">#{msg}</span> " if msg && html_tag !~ /<label/
     html_tag
 end
+
+# extend TimeZone to specify default
+# todo: rails 2.1 will have better timezone handling
+TimeZone.class_eval do
+  def self.default
+    TimeZone['Pacific Time (US & Canada)']
+  end
+end
+
