@@ -162,13 +162,13 @@ module ApplicationHelper
   
   def formatted_datetime(date)
     return "" unless date
-    date = TimeZone.default.adjust date
+    date = TimeZone.default.adjust_with_dst date
     date.strftime '%A, %B %e, %Y at %l:%M %p ' << TimeZone.default.name
   end
   
   def list_datetime(date)
     return "" unless date
-    date = TimeZone.default.adjust date
+    date = TimeZone.default.adjust_with_dst date
     date.strftime '%m/%d/%Y %I:%M %p'
   end
 
