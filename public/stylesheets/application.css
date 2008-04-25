@@ -235,6 +235,10 @@ small {
     content: "*";
 }
 */
+.property .yui-editor-container {
+    margin-left: 1em;
+    left: 25%;
+}
 .property-description {
     font-size: 0.9em
 }

@@ -32,14 +32,51 @@ init: function() {
             if (typeof($) == "undefined")
                 window.$ = YAHOO.util.Dom.get;
 
+            var query = YAHOO.util.Selector.query;
             YAHOO.util.Event.onDOMReady(function() {
                 // init yui-push-buttons
-                for (var i = 0, e, elements = YAHOO.util.Selector.query("span.yui-push-button"); e = elements[i]; i++)
+                for (var i = 0, e, elements = query("span.yui-push-button"); e = elements[i]; i++)
                     new YAHOO.widget.Button(e);
 
                 // init date-time inputs
-                for (var i = 0, e, elements = YAHOO.util.Selector.query("span.datetime-input"); e = elements[i]; i++)
+                for (var i = 0, e, elements = query("span.datetime-input"); e = elements[i]; i++)
                     App.Cal.convert(e);
+
+                // init html-editor inputs
+                for (var i = 0, e, elements = query("span.html-editor"); e = elements[i]; i++) {
+                    var textarea = query("textarea")[0];
+                    // attach editor
+                    var editor = new YAHOO.widget.Editor(textarea.id, { 
+                         animate: true,
+                         dompath: true,
+                         handleSubmit: true
+                     }); 
+                     // attach editor-resize behavior
+                     editor.on('editorContentLoaded', function() { 
+                         resize = new YAHOO.util.Resize(editor.get('element_cont').get('element'), { 
+                             autoRatio: true, 
+                             handles: ['br'], 
+                             proxy: true, 
+                             status: true, 
+                             setSize: false
+                         }); 
+                         resize.on('startResize', function() { 
+                             this.hide(); 
+                             this.set('disabled', true); 
+                         }, editor, true); 
+                         resize.on('resize', function(args) { 
+                             var h = args.height; 
+                             var th = (this.toolbar.get('element').clientHeight + 2);
+                             var dh = (this.dompath.clientHeight + 1);
+                             var newH = (h - th - dh); 
+                             this.set('width', args.width + 'px'); 
+                             this.set('height', newH + 'px'); 
+                             this.set('disabled', false); 
+                             this.show(); 
+                         }, editor, true); 
+                     });
+                     editor.render(); 
+                 }
             });
 
             App.inited = true;

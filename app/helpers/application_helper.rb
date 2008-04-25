@@ -81,6 +81,10 @@ module ApplicationHelper
       :class => css
     )
   end
+  
+  def html_editor_tag(method, options = {})
+    content_tag 'span', text_area_tag(name, value, options), :class => 'html-editor'
+  end
 
   def datetime_input_tag(name, value, options = {})
     content_tag 'span', text_field_tag(name, value, options), :class => 'datetime-input'

@@ -75,4 +75,8 @@ Rails::Initializer.run do |config|
 
   # Make Active Record use UTC-base instead of local time
   config.active_record.default_timezone = :utc
+  
+  # add to the set of allowed attributes
+  # defaults: http://dev.rubyonrails.org/browser/trunk/actionpack/lib/action_controller/vendor/html-scanner/html/sanitizer.rb
+  config.action_view.sanitized_allowed_attributes = 'style'
 end

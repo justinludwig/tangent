@@ -47,6 +47,10 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     text_tag value, options
   end
 
+  def html_editor(method, options = {})
+    content_tag 'span', text_area(method, options), :class => 'html-editor'
+  end
+
   def datetime_input(method, options = {})
     content_tag 'span', text_field(method, options), :class => 'datetime-input'
   end

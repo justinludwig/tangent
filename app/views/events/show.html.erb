@@ -35,7 +35,7 @@
 
 <% end %>
 
-<%=h @event.details %>
+<%= sanitize @event.details %>
 
 <div class="buttons">
 <%= styled_button_to 'Edit', edit_event_path(@event), :method => "get", :style => "width:6em;" %>
