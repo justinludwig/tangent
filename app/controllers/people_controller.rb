@@ -17,11 +17,12 @@
 ## 02110-1301, USA.
 
 class PeopleController < ApplicationController
-  before_filter :login_required, :except => [ :new, :create ]
   
   # GET /people
   # GET /people.xml
   def index
+    return unless has_privilege :list_people
+
     @people = Person.paginate :all, :page => requested_page, :order => requested_order, :per_page => requested_per_page
 
     respond_to do |format|
@@ -34,6 +35,7 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     @person = Person.find(params[:id])
+    return access_denied unless has_privilege? :view_people || (@person == current_person && has_privilege?(:view_self))
 
     respond_to do |format|
       format.html # show.html.erb
@@ -44,6 +46,8 @@ class PeopleController < ApplicationController
   # GET /people/new
   # GET /people/new.xml
   def new
+    return unless has_privilege :create_people
+
     @person = Person.new
 
     respond_to do |format|
@@ -54,6 +58,8 @@ class PeopleController < ApplicationController
 
   # GET /people/1/edit
   def edit
+    return access_denied unless has_privilege? :edit_people || (@person == current_person && has_privilege?(:edit_self))
+
     @person = Person.find(params[:id])
   end
 
@@ -76,6 +82,8 @@ class PeopleController < ApplicationController
   end
 =end
   def create
+    return unless has_privilege :create_people
+
     @person = Person.new(params[:person])
 
     respond_to do |format|
@@ -85,7 +93,7 @@ class PeopleController < ApplicationController
 
         # automatically "login" if self-reg
         if (!self.current_person)
-          self.current_person = @person if !self.current_person
+          self.current_person = @person unless self.current_person
           flash[:notice] = "Thanks for signing up!"
         else
           flash[:notice] = 'Person was successfully created.'
@@ -94,7 +102,7 @@ class PeopleController < ApplicationController
         format.html { redirect_back_or_default(@person) }
         format.xml  { render :xml => @person, :status => :created, :location => @person }
       else
-        @register = true if !self.current_person
+        @register = true unless self.current_person
         format.html { render :action => "new" }
         format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
       end
@@ -122,6 +130,8 @@ class PeopleController < ApplicationController
   # PUT /people/1
   # PUT /people/1.xml
   def update
+    return access_denied unless has_privilege? :edit_people || (@person == current_person && has_privilege?(:edit_self))
+
     @person = Person.find(params[:id])
 
     respond_to do |format|
@@ -139,6 +149,8 @@ class PeopleController < ApplicationController
   # DELETE /people/1
   # DELETE /people/1.xml
   def destroy
+    return access_denied unless has_privilege? :delete_people || (@person == current_person && has_privilege?(:delete_self))
+
     @person = Person.find(params[:id])
     @person.delete!
 
@@ -151,6 +163,8 @@ class PeopleController < ApplicationController
   # GET /people/1/email
   # GET /people/1/email.xml
   def email
+    return unless has_privilege :email_people
+
     # todo create email.html.erb
     @person = Person.find(params[:id])
   end
@@ -158,6 +172,8 @@ class PeopleController < ApplicationController
   # POST /people/1/send_email
   # POST /people/1/send_email.xml
   def send_email
+    return unless has_privilege :email_people
+
     @person = Person.find(params[:id])
 =begin
     respond_to do |format|

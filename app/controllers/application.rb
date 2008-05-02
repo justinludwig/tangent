@@ -21,6 +21,7 @@
 
 class ApplicationController < ActionController::Base
   include AuthenticatedSystem
+  include PrivilegedSystem
   
   # sliding_sessions
   REMEMBER_ME_EXPIRES = 4.months
