@@ -35,7 +35,7 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     @person = Person.find(params[:id])
-    return access_denied unless has_privilege? :view_people || (@person == current_person && has_privilege?(:view_self))
+    return access_denied unless (has_privilege? :view_people) || ((@person == current_person) && (has_privilege? :view_self))
 
     respond_to do |format|
       format.html # show.html.erb
@@ -58,9 +58,8 @@ class PeopleController < ApplicationController
 
   # GET /people/1/edit
   def edit
-    return access_denied unless has_privilege? :edit_people || (@person == current_person && has_privilege?(:edit_self))
-
     @person = Person.find(params[:id])
+    return access_denied unless (has_privilege? :edit_people) || ((@person == current_person) && (has_privilege? :edit_self))
   end
 
   # POST /people
@@ -130,9 +129,8 @@ class PeopleController < ApplicationController
   # PUT /people/1
   # PUT /people/1.xml
   def update
-    return access_denied unless has_privilege? :edit_people || (@person == current_person && has_privilege?(:edit_self))
-
     @person = Person.find(params[:id])
+    return access_denied unless (has_privilege? :edit_people) || ((@person == current_person) && (has_privilege? :edit_self))
 
     respond_to do |format|
       if @person.update_attributes(params[:person])
@@ -149,9 +147,9 @@ class PeopleController < ApplicationController
   # DELETE /people/1
   # DELETE /people/1.xml
   def destroy
-    return access_denied unless has_privilege? :delete_people || (@person == current_person && has_privilege?(:delete_self))
-
     @person = Person.find(params[:id])
+    return access_denied unless (has_privilege? :delete_people) || ((@person == current_person) && (has_privilege? :delete_self))
+
     @person.delete!
 
     respond_to do |format|
