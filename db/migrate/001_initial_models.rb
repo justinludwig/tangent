@@ -18,7 +18,7 @@
 
 class InitialModels < ActiveRecord::Migration
   def self.up
-    create_table "people", :force => true do |t|
+    create_table :people, :force => true do |t|
       t.column :email,                     :string, :limit => 50
       t.column :display_name,              :string, :limit => 50
       t.column :crypted_password,          :string, :limit => 50
@@ -36,13 +36,18 @@ class InitialModels < ActiveRecord::Migration
       t.column :start_date, :datetime
       t.column :end_date, :datetime
       t.column :tags, :string
-
       t.timestamps
+    end
+
+    create_table :event_coordinators do |t|
+      t.references :event
+      t.references :coordinator
     end
   end
 
   def self.down
-    drop_table "people"
+    drop_table :people
     drop_table :events
+    drop_table :event_coordinators
   end
 end

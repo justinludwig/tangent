@@ -18,6 +18,9 @@
 
 require 'digest/sha1'
 class Person < ActiveRecord::Base
+  has_many :event_coordinators
+  has_many :events, :through => :event_coordinators, :uniq => true, :order => "name", :dependent => :destroy
+
   # Virtual attribute for the unencrypted password
   attr_accessor :password
 
@@ -65,6 +68,10 @@ class Person < ActiveRecord::Base
     transitions :from => :suspended, :to => :active
     transitions :from => :suspended, :to => :pending
     transitions :from => :suspended, :to => :passive
+  end
+
+  def to_s
+    display_name
   end
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.

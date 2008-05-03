@@ -1,4 +1,3 @@
-<%
 ## Tangent, an online sign-up sheet
 ## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
 ## 
@@ -16,28 +15,8 @@
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
--%>
 
-<% @page_title = @event.name %>
-
-<h1><%=h @event.name %></h1>
-
-<% fields_for(@event, :builder => ApplicationFormBuilder) do |f| %>
-
-<fieldset>
-  <legend>Event Info</legend>
-<%= f.property_line :text, :name %>
-<%= f.property_line :text, :description %>
-<%= f.property_line :text, :coordinators %>
-<%= f.property_line :datetime, :start_date, :label => "Start" %>
-<%= f.property_line :datetime, :end_date, :label => "End" %>
-<%= f.property_line :text, :tags %>
-</fieldset>
-
-<% end %>
-
-<%= sanitize @event.details %>
-
-<div class="buttons">
-<%= styled_button_to 'Edit', edit_event_path(@event), :method => "get", :style => "width:6em;" %>
-</div>
+class EventCoordinator < ActiveRecord::Base
+  belongs_to :event
+  belongs_to :coordinator, :class_name => 'Person', :foreign_key => 'coordinator_id'
+end

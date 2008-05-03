@@ -50,6 +50,7 @@ class EventsController < ApplicationController
     return unless has_privilege :create_events
 
     @event = Event.new
+    @event.temp_coordinator_ids = [ current_person.id ]
 
     respond_to do |format|
       format.html # new.html.erb
@@ -59,9 +60,8 @@ class EventsController < ApplicationController
 
   # GET /events/1/edit
   def edit
-    return unless has_privilege :edit_events
-
     @event = Event.find(params[:id])
+    return access_denied unless (has_privilege? :edit_events) || (@event.coordinators.include? current_person)
   end
 
   # POST /events
@@ -86,9 +86,8 @@ class EventsController < ApplicationController
   # PUT /events/1
   # PUT /events/1.xml
   def update
-    return unless has_privilege :edit_events
-
     @event = Event.find(params[:id])
+    return access_denied unless (has_privilege? :edit_events) || (@event.coordinators.include? current_person)
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
@@ -105,9 +104,9 @@ class EventsController < ApplicationController
   # DELETE /events/1
   # DELETE /events/1.xml
   def destroy
-    return unless has_privilege :delete_events
-
     @event = Event.find(params[:id])
+    return access_denied unless (has_privilege? :delete_events) || (@event.coordinators.include? current_person)
+
     @event.destroy
 
     respond_to do |format|

@@ -31,6 +31,7 @@
   <legend>Event Info</legend>
 <%= f.property_line :text_field, :name, :required => true %>
 <%= f.property_line :text_field, :description, :label => "Brief Description" %>
+<%= f.property_line :text_field, :temp_coordinator_ids, :required => true, :label => "Coordinators", :description => "comma-separated list of person ids" %>
 <%= f.property_line :html_editor, :details, :class => "long", :rows => 10, :label => "Full-Page Details" %>
 <%= f.property_line :text_field, :tags, :description => "separate tags with commas" %>
 <%= f.property_line :datetime_input, :start_date, :label => "Start", :required => true, :description => "free-form date like \"tomorrow\" or \"tues 1pm\" or \"2/28/09\"" %>

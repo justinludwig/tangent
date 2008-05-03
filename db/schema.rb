@@ -11,6 +11,11 @@
 
 ActiveRecord::Schema.define(:version => 1) do
 
+  create_table "event_coordinators", :force => true do |t|
+    t.integer "event_id"
+    t.integer "coordinator_id"
+  end
+
   create_table "events", :force => true do |t|
     t.string   "name",        :limit => 50
     t.string   "description", :limit => 50
