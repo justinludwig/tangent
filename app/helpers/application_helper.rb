@@ -176,4 +176,8 @@ module ApplicationHelper
     date.strftime '%m/%d/%Y %I:%M %p'
   end
 
+  def link_to_array(models)
+    models.map { |m| link_to m, m } .join ', '
+  end
+
 end

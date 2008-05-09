@@ -28,7 +28,7 @@
   <legend>Event Info</legend>
 <%= f.property_line :text, :name %>
 <%= f.property_line :text, :description %>
-<%= f.property_line :text, :coordinators %>
+<%= property_line_tag link_to_array(@event.coordinators), 'coordinators' %>
 <%= f.property_line :datetime, :start_date, :label => "Start" %>
 <%= f.property_line :datetime, :end_date, :label => "End" %>
 <%= f.property_line :text, :tags %>

@@ -31,18 +31,40 @@
 <tbody>
 </tbody>
 </table>
-<div>
+<div class="tbl-foot">
 	<%= link_to "My Past Activities", "/my/activities/past" %>
 </div>
 
 <table class="tbl">
 <caption>My Upcoming Events</caption>
 <thead>
-    <tr><th>Event</th><th>Start</th><th>End</th><th class="tools">&nbsp;</th></tr>
+  <tr>
+    <th><%= link_to_order_by "Name", "name" %></th>
+    <th><%= link_to_order_by "Description", "description" %></th>
+    <th><%= link_to_order_by "Start", "start_date" %></th>
+    <th><%= link_to_order_by "End", "end_date" %></th>
+    <th>Tags</th>
+	<th class="tools">&nbsp;</th>
+  </tr>
 </thead>
 <tbody>
-</tbody>
+<% for event in @events %>
+  <tr class="<%= cycle("", "alt") -%>">
+    <td><%= link_to h(event.name), event %></td>
+    <td><%=h event.description %></td>
+    <td><%= list_datetime event.start_date %></td>
+    <td><%= list_datetime event.end_date %></td>
+    <td><%=h event.tags %></td>
+    <td class="tools">
+      <%= link_to titled_image_tag("silk/page_edit.png", :alt => "Edit"), edit_event_path(event) %>
+	  <%= link_to_delete event %>
+    </td>
+  </tr>
+<% end %>
 </table>
+<%= links_to_page @events %>
+
+<div class="tbl-foot">
 <div class="lr-container">
 <span class="l">
 	<%= link_to "My Past Events", "/my/events/past" %>
@@ -50,4 +72,5 @@
 <span class="r">
 	<%= button_to "New Event", "/events/new" %>
 </span>
+</div>
 </div>

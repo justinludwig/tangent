@@ -18,9 +18,9 @@
 ## 02110-1301, USA.
 -%>
 
-<% @page_title = "Events" %>
+<% @page_title ||= "Events" %>
 
-<h1>Events</h1>
+<h1><%= @page_title %></h1>
 
 <table class="tbl">
 <thead>

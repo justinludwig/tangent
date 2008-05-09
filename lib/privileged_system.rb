@@ -62,6 +62,7 @@ module PrivilegedSystem
       :create_participants,
       :edit_participants,
       :delete_participants,
+      :list_participants,
     ]
     AUTHENTICATED_USER_PRIVILEGES = [
       # people
@@ -71,14 +72,16 @@ module PrivilegedSystem
       :delete_self,
       # events
       :create_events,
+      :list_events_coordinated_for_self,
       # activities
       :create_activities,
       # participants
-      :create_participant_for_self,
+      :create_participants_for_self,
       :view_participants,
-      :view_participant_for_self,
-      :edit_participant_for_self,
-      :delete_participant_for_self,
+      :view_participants_for_self,
+      :edit_participants_for_self,
+      :delete_participants_for_self,
+      :list_participants_for_self,
     ]
     ANONYMOUS_USER_PRIVILEGES = [
       # people

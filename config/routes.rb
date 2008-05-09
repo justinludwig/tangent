@@ -18,11 +18,13 @@
 
 ActionController::Routing::Routes.draw do |map|
   map.resources :events
-
   map.resources :people, :member => { :email => :get, :send_email => :post }
   map.resource :session
   
-  map.my_stuff "my", :controller => "my_stuff"
+  map.my_stuff 'my', :controller => 'my_stuff'
+  map.my_events 'my/events', :controller => 'my_stuff', :action => 'events'
+  map.my_events 'my/events/past', :controller => 'my_stuff', :action => 'events_past'
+  map.my_events 'my/events/upcoming', :controller => 'my_stuff', :action => 'events_upcoming'
   
   # The priority is based upon order of creation: first created -> highest priority.
 

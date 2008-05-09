@@ -18,7 +18,7 @@
 
 require 'digest/sha1'
 class Person < ActiveRecord::Base
-  has_many :event_coordinators
+  has_many :event_coordinators, :foreign_key => 'coordinator_id'
   has_many :events, :through => :event_coordinators, :uniq => true, :order => "name", :dependent => :destroy
 
   # Virtual attribute for the unencrypted password

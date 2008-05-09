@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
     end
     # must be either "display_name ASC" or "display_name DESC"
     order = default unless order =~ /^[a-z_]+(?: ASC| DESC)?$/
-    order
+    params[:order] = order
   end
 
   def requested_query(default = nil)

@@ -41,6 +41,22 @@ class ApplicationFormBuilder < ActionView::Helpers::FormBuilder
     text_tag @object.send(method), options
   end
 
+  def text_array_field(method, options = {})
+    value = @object.send(method)
+    value = value.join ',' unless value.blank?
+
+    options[:id] = field_id(method) unless options[:id]
+    text_field_tag field_name(method), value, options
+  end
+
+  def hidden_array_field(method, options = {})
+    value = @object.send(method)
+    value = value.join ',' unless value.blank?
+
+    options[:id] = field_id(method) unless options[:id]
+    hidden_field_tag field_name(method), value, options
+  end
+
   def datetime(method, options = {})
     options[:id] = field_id(method) unless options[:id]
     value = formatted_datetime @object.send(method)

@@ -24,6 +24,7 @@ class Event < ActiveRecord::Base
   validates_length_of :name, :maximum => 50
   validates_format_of :name, :with => /\S/ 
   validates_length_of :description, :maximum => 50
+  validates_presence_of :start_date
 
   # override toString with event name
   def to_s
