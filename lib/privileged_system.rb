@@ -58,6 +58,7 @@ module PrivilegedSystem
       # activities
       :edit_activities,
       :delete_activities,
+      :list_activities,
       # participants
       :create_participants,
       :edit_participants,

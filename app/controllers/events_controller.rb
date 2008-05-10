@@ -17,6 +17,7 @@
 ## 02110-1301, USA.
 
 class EventsController < ApplicationController
+  include EventsHelper
 
   # GET /events
   # GET /events.xml
@@ -37,6 +38,7 @@ class EventsController < ApplicationController
     return unless has_privilege :view_events
 
     @event = Event.find(params[:id])
+    @activities = @event.activities.paginate :all, :page => requested_page, :order => requested_order('name'), :per_page => requested_per_page
 
     respond_to do |format|
       format.html # show.html.erb
@@ -61,7 +63,9 @@ class EventsController < ApplicationController
   # GET /events/1/edit
   def edit
     @event = Event.find(params[:id])
-    return access_denied unless (has_privilege? :edit_events) || (@event.coordinators.include? current_person)
+    return unless has_privilege_for_event @event, :edit_events
+
+    @activities = @event.activities.paginate :all, :page => requested_page, :order => requested_order('name'), :per_page => requested_per_page
   end
 
   # POST /events
@@ -87,7 +91,7 @@ class EventsController < ApplicationController
   # PUT /events/1.xml
   def update
     @event = Event.find(params[:id])
-    return access_denied unless (has_privilege? :edit_events) || (@event.coordinators.include? current_person)
+    return unless has_privilege_for_event @event, :edit_events
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
@@ -105,7 +109,7 @@ class EventsController < ApplicationController
   # DELETE /events/1.xml
   def destroy
     @event = Event.find(params[:id])
-    return access_denied unless (has_privilege? :delete_events) || (@event.coordinators.include? current_person)
+    return unless has_privilege_for_event @event, :delete_events
 
     @event.destroy
 

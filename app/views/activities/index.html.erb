@@ -18,28 +18,11 @@
 ## 02110-1301, USA.
 -%>
 
-<% @page_title = @event.name %>
+<% @page_title = @event.blank? ? "Activities" : "Activities for #{@event.name}" %>
 
-<h1><%=h @event.name %></h1>
+<h1><%=h @page_title %></h1>
 
-<% fields_for(@event, :builder => ApplicationFormBuilder) do |f| %>
-
-<fieldset>
-  <legend>Event Info</legend>
-<%= f.property_line :text, :name %>
-<%= f.property_line :text, :tags %>
-<%= property_line_tag link_to_array(@event.coordinators), 'coordinators' %>
-<%= f.property_line :datetime, :start_date, :label => "Start" %>
-<%= f.property_line :datetime, :end_date, :label => "End" %>
-</fieldset>
-
-<% end %>
-
-<%= sanitize @event.details %>
-
-<% if has_privilege? :view_activities %>
 <table class="tbl">
-<caption>Activities</caption>
 <thead>
   <tr>
     <th><%= link_to_order_by "Name", "name" %></th>
@@ -48,6 +31,7 @@
     <th>Openings</th>
     <th><%= link_to_order_by "Start", "start_date" %></th>
     <th><%= link_to_order_by "End", "end_date" %></th>
+    <th class="tools">&nbsp;</th>
   </tr>
 </thead>
 <tbody>
@@ -59,14 +43,12 @@
     <td><%=h activity.openings %></td>
     <td><%= list_datetime activity.start_date %></td>
     <td><%= list_datetime activity.end_date %></td>
+    <td class="tools">
+      <%= link_to titled_image_tag("silk/page_edit.png", :alt => "Edit"), edit_activity_path(activity) if @can_edit %>
+	  <%= link_to_delete activity if @can_delete %>
+    </td>
   </tr>
 <% end %>
 </table>
 <%= links_to_page @activities %>
-<% end %>
 
-<div class="buttons">
-<% if has_privilege_for_event? @event, :edit_events %>
-<%= styled_button_to 'Edit', edit_event_path(@event), :method => "get", :style => "width:6em;" %>
-<% end %>
-</div>

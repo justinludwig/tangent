@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  details: MyText
+  criteria: MyString
+  openings: 1
+  start_date: 2008-05-09 12:49:23
+  end_date: 2008-05-09 12:49:23
+  tags: MyString
+
+two:
+  name: MyString
+  details: MyText
+  criteria: MyString
+  openings: 1
+  start_date: 2008-05-09 12:49:23
+  end_date: 2008-05-09 12:49:23
+  tags: MyString

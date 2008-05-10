@@ -16,15 +16,7 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
-module PeopleHelper
-
-  def has_privilege_for_person?(person, privilege, self_privilege)
-    (has_privilege? privilege) || ((person == current_person) && (has_privilege? self_privilege))
-  end
-
-  def has_privilege_for_person(person, privilege, self_privilege)
-    return (access_denied || false) unless has_privilege_for_person? person, privilege, self_privilege
-    return true
-  end
-
+class Participant < ActiveRecord::Base
+  belongs_to :activity
+  belongs_to :person
 end

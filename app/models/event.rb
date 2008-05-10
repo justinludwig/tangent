@@ -17,14 +17,16 @@
 ## 02110-1301, USA.
 
 class Event < ActiveRecord::Base
-  has_many :event_coordinators
-  has_many :coordinators, :through => :event_coordinators, :uniq => true, :order => "display_name", :conditions => "state = 'active'", :dependent => :destroy
+  has_many :event_coordinators, :dependent => :destroy
+  has_many :coordinators, :through => :event_coordinators, :uniq => true, :order => "display_name", :conditions => "state = 'active'"
+
+  has_many :activities, :order => "name", :dependent => :destroy
 
   validates_presence_of :name
   validates_length_of :name, :maximum => 50
   validates_format_of :name, :with => /\S/ 
-  validates_length_of :description, :maximum => 50
   validates_presence_of :start_date
+  validates_length_of :tags, :maximum => 100
 
   # override toString with event name
   def to_s

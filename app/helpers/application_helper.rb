@@ -18,6 +18,7 @@
 
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  include PrivilegedSystem
   
   PUSH_BUTTON_HTML = 
     '<span class="yui-button yui-push-button"><span class="first-child"><button\1\3>\2</button></span></span>'

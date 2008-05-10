@@ -17,14 +17,18 @@
 ## 02110-1301, USA.
 
 ActionController::Routing::Routes.draw do |map|
-  map.resources :events
+
+  map.resources :events, :has_many => :activities
+  map.resources :activities, :has_many => :participants
+  map.resources :participants
+
   map.resources :people, :member => { :email => :get, :send_email => :post }
   map.resource :session
   
   map.my_stuff 'my', :controller => 'my_stuff'
   map.my_events 'my/events', :controller => 'my_stuff', :action => 'events'
-  map.my_events 'my/events/past', :controller => 'my_stuff', :action => 'events_past'
-  map.my_events 'my/events/upcoming', :controller => 'my_stuff', :action => 'events_upcoming'
+  map.my_events_past 'my/events/past', :controller => 'my_stuff', :action => 'events_past'
+  map.my_events_upcoming 'my/events/upcoming', :controller => 'my_stuff', :action => 'events_upcoming'
   
   # The priority is based upon order of creation: first created -> highest priority.
 

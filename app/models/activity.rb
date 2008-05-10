@@ -16,15 +16,21 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
-module PeopleHelper
+class Activity < ActiveRecord::Base
+  belongs_to :event
 
-  def has_privilege_for_person?(person, privilege, self_privilege)
-    (has_privilege? privilege) || ((person == current_person) && (has_privilege? self_privilege))
-  end
+  has_many :participants, :dependent => :destroy
+  has_many :people, :through => :participants, :uniq => true, :order => "display_name", :conditions => "state = 'active'"
 
-  def has_privilege_for_person(person, privilege, self_privilege)
-    return (access_denied || false) unless has_privilege_for_person? person, privilege, self_privilege
-    return true
+  validates_presence_of :name
+  validates_length_of :name, :maximum => 50
+  validates_format_of :name, :with => /\S/ 
+  validates_length_of :criteria, :maximum => 100
+  validates_length_of :tags, :maximum => 100
+
+  # override toString with activity name
+  def to_s
+    name
   end
 
 end

@@ -11,18 +11,36 @@
 
 ActiveRecord::Schema.define(:version => 1) do
 
+  create_table "activities", :force => true do |t|
+    t.integer  "event_id"
+    t.string   "name",       :limit => 50
+    t.text     "details"
+    t.string   "criteria",   :limit => 100
+    t.integer  "openings"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.string   "tags",       :limit => 100
+  end
+
   create_table "event_coordinators", :force => true do |t|
     t.integer "event_id"
     t.integer "coordinator_id"
   end
 
   create_table "events", :force => true do |t|
-    t.string   "name",        :limit => 50
-    t.string   "description", :limit => 50
+    t.string   "name",       :limit => 50
     t.text     "details"
     t.datetime "start_date"
     t.datetime "end_date"
-    t.string   "tags"
+    t.string   "tags",       :limit => 100
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "participants", :force => true do |t|
+    t.integer  "activity_id"
+    t.integer  "person_id"
+    t.string   "state",       :limit => 20, :default => "waiting"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

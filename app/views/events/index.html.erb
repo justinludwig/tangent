@@ -20,13 +20,12 @@
 
 <% @page_title ||= "Events" %>
 
-<h1><%= @page_title %></h1>
+<h1><%=h @page_title %></h1>
 
 <table class="tbl">
 <thead>
   <tr>
     <th><%= link_to_order_by "Name", "name" %></th>
-    <th><%= link_to_order_by "Description", "description" %></th>
     <th><%= link_to_order_by "Start", "start_date" %></th>
     <th><%= link_to_order_by "End", "end_date" %></th>
     <th>Tags</th>
@@ -37,7 +36,6 @@
 <% for event in @events %>
   <tr class="<%= cycle("", "alt") -%>">
     <td><%= link_to h(event.name), event %></td>
-    <td><%=h event.description %></td>
     <td><%= list_datetime event.start_date %></td>
     <td><%= list_datetime event.end_date %></td>
     <td><%=h event.tags %></td>

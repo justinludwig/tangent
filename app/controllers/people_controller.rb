@@ -17,6 +17,7 @@
 ## 02110-1301, USA.
 
 class PeopleController < ApplicationController
+  include PeopleHelper
   
   # GET /people
   # GET /people.xml
@@ -35,7 +36,7 @@ class PeopleController < ApplicationController
   # GET /people/1.xml
   def show
     @person = Person.find(params[:id])
-    return access_denied unless (has_privilege? :view_people) || ((@person == current_person) && (has_privilege? :view_self))
+    return unless has_privilege_for_person @person, :view_people, :view_self
 
     respond_to do |format|
       format.html # show.html.erb
@@ -59,7 +60,7 @@ class PeopleController < ApplicationController
   # GET /people/1/edit
   def edit
     @person = Person.find(params[:id])
-    return access_denied unless (has_privilege? :edit_people) || ((@person == current_person) && (has_privilege? :edit_self))
+    return unless has_privilege_for_person @person, :edit_people, :edit_self
   end
 
   # POST /people
@@ -130,7 +131,7 @@ class PeopleController < ApplicationController
   # PUT /people/1.xml
   def update
     @person = Person.find(params[:id])
-    return access_denied unless (has_privilege? :edit_people) || ((@person == current_person) && (has_privilege? :edit_self))
+    return unless has_privilege_for_person @person, :edit_people, :edit_self
 
     respond_to do |format|
       if @person.update_attributes(params[:person])
@@ -148,7 +149,7 @@ class PeopleController < ApplicationController
   # DELETE /people/1.xml
   def destroy
     @person = Person.find(params[:id])
-    return access_denied unless (has_privilege? :delete_people) || ((@person == current_person) && (has_privilege? :delete_self))
+    return unless has_privilege_for_person @person, :delete_people, :delete_self
 
     @person.delete!
 

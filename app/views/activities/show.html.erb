@@ -18,9 +18,9 @@
 ## 02110-1301, USA.
 -%>
 
-<% @page_title = @event.name %>
+<% @page_title = "#{@activity.name} for #{@event.name}" %>
 
-<h1><%=h @event.name %></h1>
+<h1><%=h @activity.name %> for <%=h @event.name %></h1>
 
 <% fields_for(@event, :builder => ApplicationFormBuilder) do |f| %>
 
@@ -35,38 +35,24 @@
 
 <% end %>
 
-<%= sanitize @event.details %>
+<% fields_for(@activity, :builder => ApplicationFormBuilder) do |f| %>
 
-<% if has_privilege? :view_activities %>
-<table class="tbl">
-<caption>Activities</caption>
-<thead>
-  <tr>
-    <th><%= link_to_order_by "Name", "name" %></th>
-    <th>Tags</th>
-    <th>Criteria</th>
-    <th>Openings</th>
-    <th><%= link_to_order_by "Start", "start_date" %></th>
-    <th><%= link_to_order_by "End", "end_date" %></th>
-  </tr>
-</thead>
-<tbody>
-<% for activity in @activities %>
-  <tr class="<%= cycle("", "alt") -%>">
-    <td><%= link_to h(activity.name), activity %></td>
-    <td><%=h activity.tags %></td>
-    <td><%=h activity.criteria %></td>
-    <td><%=h activity.openings %></td>
-    <td><%= list_datetime activity.start_date %></td>
-    <td><%= list_datetime activity.end_date %></td>
-  </tr>
+<fieldset>
+  <legend>Activity Info</legend>
+<%= f.property_line :text, :name %>
+<%= f.property_line :text, :tags %>
+<%= f.property_line :text, :criteria %>
+<%= f.property_line :text, :openings %>
+<%= f.property_line :datetime, :start_date, :label => "Start" %>
+<%= f.property_line :datetime, :end_date, :label => "End" %>
+</fieldset>
+
 <% end %>
-</table>
-<%= links_to_page @activities %>
-<% end %>
+
+<%= sanitize @activity.details %>
 
 <div class="buttons">
 <% if has_privilege_for_event? @event, :edit_events %>
-<%= styled_button_to 'Edit', edit_event_path(@event), :method => "get", :style => "width:6em;" %>
+<%= styled_button_to 'Edit', edit_activity_path(@activity), :method => "get", :style => "width:6em;" %>
 <% end %>
 </div>

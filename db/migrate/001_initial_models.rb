@@ -18,7 +18,7 @@
 
 class InitialModels < ActiveRecord::Migration
   def self.up
-    create_table :people, :force => true do |t|
+    create_table :people do |t|
       t.column :email,                     :string, :limit => 50
       t.column :display_name,              :string, :limit => 50
       t.column :crypted_password,          :string, :limit => 50
@@ -31,11 +31,10 @@ class InitialModels < ActiveRecord::Migration
 
     create_table :events do |t|
       t.column :name, :string, :limit => 50
-      t.column :description, :string, :limit => 50
       t.column :details, :text
       t.column :start_date, :datetime
       t.column :end_date, :datetime
-      t.column :tags, :string
+      t.column :tags, :string, :limit => 100
       t.timestamps
     end
 
@@ -43,11 +42,31 @@ class InitialModels < ActiveRecord::Migration
       t.references :event
       t.references :coordinator
     end
+
+    create_table :activities do |t|
+      t.references :event
+      t.string :name, :limit => 50
+      t.text :details
+      t.string :criteria, :limit => 100
+      t.integer :openings
+      t.datetime :start_date
+      t.datetime :end_date
+      t.string :tags, :limit => 100
+    end
+
+    create_table :participants do |t|
+      t.references :activity
+      t.references :person
+      t.string :state, :limit => 20, :null => :no, :default => 'waiting'
+      t.timestamps
+    end
   end
 
   def self.down
     drop_table :people
     drop_table :events
     drop_table :event_coordinators
+    drop_table :activities
+    drop_table :participants
   end
 end
