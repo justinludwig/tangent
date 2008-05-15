@@ -19,4 +19,49 @@
 class Participant < ActiveRecord::Base
   belongs_to :activity
   belongs_to :person
+ 
+  acts_as_state_machine :initial => :waiting
+  state :waiting
+  state :invited
+  state :tentative
+  state :confirmed
+  state :withdrawn
+
+  event :wait do
+    transitions :from => [:invited, :tentative, :confirmed, :withdrawn], :to => :waiting
+  end
+
+  event :invite do
+    transitions :from => [:waiting, :withdrawn], :to => :invited
+  end
+
+  event :tentative do
+    transitions :from => [:waiting, :invited, :confirmed, :withdrawn], :to => :tentative
+  end
+
+  event :confirm do
+    transitions :from => [:waiting, :invited, :tentative, :withdrawn], :to => :confirmed, :guard => Proc.new { |participant|
+      activity = participant.activity
+      openings = activity.openings
+      openings.blank? || activity.participants.count_in_state('confirmed').length < openings
+    }
+  end
+
+  event :withdraw do
+    transitions :from => [:invited, :tentative, :confirmed], :to => :withdrawn
+  end
+
+  def to_s
+    s = String.new person.display_name
+    case state
+      when 'confirmed', 'tentative', 'waiting'
+        s << " #{state} for "
+      when 'invited'
+        s << " #{state} to "
+      when 'withdrawn'
+        s << " #{withdrawn} from "
+    end
+    s << activity.name
+  end
+
 end

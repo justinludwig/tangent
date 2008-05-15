@@ -78,7 +78,6 @@ module PrivilegedSystem
       :create_activities,
       # participants
       :create_participants_for_self,
-      :view_participants,
       :view_participants_for_self,
       :edit_participants_for_self,
       :delete_participants_for_self,
@@ -91,6 +90,8 @@ module PrivilegedSystem
       :view_events,
       # activities
       :view_activities,
+      # participants
+      :view_participants,
     ]
     PRIVILEGE_ACTION_NAMES = {
       'index' => 'list',

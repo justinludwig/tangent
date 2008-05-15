@@ -55,6 +55,12 @@ class ActivitiesController < ApplicationController
     @event = @activity.event
     return unless has_privilege_for_event @event, :view_activities
 
+    begin
+      @participant = @activity.participants.find_by_person_id current_person.id if logged_in?
+    rescue ActiveRecord::RecordNotFound
+    end
+    @participants = @activity.participants.paginate :all, :page => requested_page, :order => requested_order, :per_page => requested_per_page
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @activity }
@@ -134,4 +140,5 @@ class ActivitiesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
 end

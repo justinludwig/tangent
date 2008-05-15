@@ -19,7 +19,9 @@
 ActionController::Routing::Routes.draw do |map|
 
   map.resources :events, :has_many => :activities
-  map.resources :activities, :has_many => :participants
+  map.resources :activities do |activity|
+    activity.resources :participants, :collection => { :confirm => :post }
+  end
   map.resources :participants
 
   map.resources :people, :member => { :email => :get, :send_email => :post }

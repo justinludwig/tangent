@@ -77,6 +77,8 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
+        @event.activities.create :name => 'Attendee'
+
         flash[:notice] = 'Event was successfully created.'
         format.html { redirect_to(@event) }
         format.xml  { render :xml => @event, :status => :created, :location => @event }

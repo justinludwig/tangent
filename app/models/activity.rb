@@ -20,13 +20,13 @@ class Activity < ActiveRecord::Base
   belongs_to :event
 
   has_many :participants, :dependent => :destroy
-  has_many :people, :through => :participants, :uniq => true, :order => "display_name", :conditions => "state = 'active'"
+  has_many :people, :through => :participants, :uniq => true, :order => "display_name", :conditions => "people.state = 'active'"
 
   validates_presence_of :name
   validates_length_of :name, :maximum => 50
   validates_format_of :name, :with => /\S/ 
-  validates_length_of :criteria, :maximum => 100
-  validates_length_of :tags, :maximum => 100
+  validates_length_of :criteria, :maximum => 100, :allow_blank => true
+  validates_length_of :tags, :maximum => 100, :allow_blank => true
 
   # override toString with activity name
   def to_s

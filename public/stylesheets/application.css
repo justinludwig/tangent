@@ -255,6 +255,9 @@ label.checkbox, label.radio {
     padding: 0.3em 0;
     text-align: right;
 }
+.button-to, .button-to * {
+    display: inline;
+}
 
 .notice {
     color: #060;

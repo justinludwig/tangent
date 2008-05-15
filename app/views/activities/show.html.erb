@@ -22,6 +22,8 @@
 
 <h1><%=h @activity.name %> for <%=h @event.name %></h1>
 
+
+
 <% fields_for(@event, :builder => ApplicationFormBuilder) do |f| %>
 
 <fieldset>
@@ -49,10 +51,54 @@
 
 <% end %>
 
+<% if has_privilege_for_event? @event, :edit_events %>
+<div class="buttons">
+<%= styled_button_to 'Edit', edit_activity_path(@activity), :method => "get", :style => "width:6em;" %>
+</div>
+<% end %>
+
+<fieldset>
+  <legend>My Participation</legend>
+<%= property_line_tag text_tag(@participant.blank? ? "Not signed-up" : @participant.state.capitalize, :class=> "medium"), "state", :label => "Status" %>
+
+<% if logged_in? %>
+</fieldset>
+<div class="buttons">
+  <%= styled_button_to 'Sign Up', confirm_activity_participants_path(@activity), :style => "width:8em;" %>
+</div>
+
+<% else %>
+<% form_tag confirm_activity_participants_path(@activity) do %>
+
+<%= property_line_tag text_field_tag("email", nil, :class=> "medium"), "email", :required => true, :label => "Email" %>
+
+</fieldset>
+<div class="buttons">
+  <%= styled_submit_tag "Sign Up", :style => "width:8em;" %>
+</div>
+
+<% end %>
+<% end %>
+
 <%= sanitize @activity.details %>
 
-<div class="buttons">
-<% if has_privilege_for_event? @event, :edit_events %>
-<%= styled_button_to 'Edit', edit_activity_path(@activity), :method => "get", :style => "width:6em;" %>
+<% if has_privilege_for_event? @event, :view_participants %>
+<table class="tbl">
+<caption>Participants</caption>
+<thead>
+  <tr>
+    <th><%= link_to_order_by "Name", "display_name" %></th>
+    <th><%= link_to_order_by "Status", "state" %></th>
+  </tr>
+</thead>
+<tbody>
+<% for participant in @participants %>
+  <tr class="<%= cycle("", "alt") -%>">
+    <td><%= link_to h(participant.person.display_name), participant.person %></td>
+    <td><%=h participant.state.capitalize %></td>
+  </tr>
 <% end %>
-</div>
+</table>
+<%= links_to_page @participants %>
+<% end %>
+
