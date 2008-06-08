@@ -34,37 +34,3 @@ ActionView::Base.field_error_proc = Proc.new do |html_tag, instance|
     html_tag
 end
 
-# extend TimeZone to specify default
-# todo: rails 2.1 will have better timezone handling
-TimeZone.class_eval do
-  # us dst start,end dates
-  DST = [
-    [ Time.utc(2006, 4,  2), Time.utc(2006, 10, 29) ],
-    [ Time.utc(2007, 3, 11), Time.utc(2007, 11,  4) ],
-    [ Time.utc(2008, 3,  9), Time.utc(2008, 11,  2) ],
-    [ Time.utc(2009, 3,  8), Time.utc(2009, 11,  1) ],
-    [ Time.utc(2010, 3, 14), Time.utc(2010, 11,  7) ],
-    [ Time.utc(2011, 3, 13), Time.utc(2011, 11,  6) ],
-    [ Time.utc(2012, 3, 12), Time.utc(2012, 11,  5) ],
-    [ Time.utc(2013, 3, 11), Time.utc(2013, 11,  4) ],
-    [ Time.utc(2014, 3, 10), Time.utc(2014, 11,  3) ],
-    [ Time.utc(2015, 3,  9), Time.utc(2015, 11,  2) ],
-  ]
-
-  # default time-zone
-  def self.default
-    TimeZone['Pacific Time (US & Canada)']
-  end
-
-  # adjust including us dst
-  def adjust_with_dst(time)
-    time = adjust time
-    return time if name == 'Arizona' || name == 'Hawaii' || !TimeZone.us_zones.include?(self)
-    time += 1.hour if DST.detect do |t|
-      break false if t[0] > time
-      break true if t[1] > time
-    end
-    return time
-  end
-end
-

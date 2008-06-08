@@ -51,6 +51,7 @@ init: function() {
                          dompath: true,
                          handleSubmit: true
                      }); 
+                     /* crashes ff 3b5
                      // attach editor-resize behavior
                      editor.on('editorContentLoaded', function() { 
                          resize = new YAHOO.util.Resize(editor.get('element_cont').get('element'), { 
@@ -75,6 +76,7 @@ init: function() {
                              this.show(); 
                          }, editor, true); 
                      });
+                     */
                      editor.render(); 
                  }
             });

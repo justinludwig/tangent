@@ -240,6 +240,7 @@ small {
 }
 */
 .property .yui-editor-container {
+    position: relative;
     margin-left: 1em;
     left: 25%;
 }

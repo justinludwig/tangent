@@ -27,15 +27,15 @@ module ApplicationHelper
 
   def yui_stylesheet_link_tag
     stylesheet_link_tag(
-      "http://yui.yahooapis.com/2.5.1/build/reset-fonts-grids/reset-fonts-grids.css",
-      "http://yui.yahooapis.com/2.5.1/build/assets/skins/sam/skin.css" 
+      "http://yui.yahooapis.com/2.5.2/build/reset-fonts-grids/reset-fonts-grids.css",
+      "http://yui.yahooapis.com/2.5.2/build/assets/skins/sam/skin.css" 
     )
   end
 
   def yui_javascript_include_tag
     javascript_include_tag(
-      "http://yui.yahooapis.com/2.5.1/build/yuiloader/yuiloader-beta-min.js",
-      "http://yui.yahooapis.com/2.5.1/build/event/event-min.js"
+      "http://yui.yahooapis.com/2.5.2/build/yuiloader/yuiloader-beta-min.js",
+      "http://yui.yahooapis.com/2.5.2/build/event/event-min.js"
     )
   end
 
@@ -167,13 +167,11 @@ module ApplicationHelper
   
   def formatted_datetime(date)
     return "" unless date
-    date = TimeZone.default.adjust_with_dst date
-    date.strftime '%A, %B %e, %Y at %l:%M %p ' << TimeZone.default.name
+    date.strftime '%A, %B %e, %Y at %l:%M %p %Z'
   end
   
   def list_datetime(date)
     return "" unless date
-    date = TimeZone.default.adjust_with_dst date
     date.strftime '%m/%d/%Y %I:%M %p'
   end
 
