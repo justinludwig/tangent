@@ -32,6 +32,15 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '51b7778c2d93981d22553fb1b9a42684'
+  
+  # store person data in cookie
+  def remember_person_data
+      js_name = javascript_helper.escape_javascript(current_person.display_name)
+      cookies[:tangent_person] = {
+        :value => "id:#{current_person.id},name:'#{js_name}'",
+        :expires => Time.now + REMEMBER_ME_EXPIRES 
+      }
+  end
 
   def requested_page(default = 1)
     page = (params[:page] ? params[:page].to_i : default)
@@ -60,6 +69,17 @@ class ApplicationController < ActionController::Base
 
   def requested_query(default = nil)
     params[:q] || default
+  end
+  
+  protected
+  
+  def javascript_helper
+    JavaScriptHelper.instance
+  end
+        
+  class JavaScriptHelper
+    include Singleton
+    include ActionView::Helpers::JavaScriptHelper
   end
 
 end

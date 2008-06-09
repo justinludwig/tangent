@@ -42,14 +42,9 @@ class SessionsController < ApplicationController
     self.current_person = Person.authenticate(params[:login], params[:password])
     if logged_in?
       session[:auth_expires] = Time.now + REMEMBER_ME_EXPIRES if params[:remember_me]
+      remember_person_data
+      
       flash[:notice] = "Welcome back, #{current_person.display_name}!"
-      
-      js_name = javascript_helper.escape_javascript(current_person.display_name)
-      cookies[:tangent_person] = {
-        :value => "id:#{current_person.id},name:'#{js_name}'",
-        :expires => Time.now + REMEMBER_ME_EXPIRES 
-      }
-      
       redirect_back_or_default('/')
     else
       flash[:error] = "Email or password does not match a registered person."
@@ -66,16 +61,5 @@ class SessionsController < ApplicationController
   
   def authenticity_token
     render :text => form_authenticity_token
-  end
-  
-  protected
-  
-  def javascript_helper
-    JavaScriptHelper.instance
-  end
-        
-  class JavaScriptHelper
-    include Singleton
-    include ActionView::Helpers::JavaScriptHelper
   end
 end

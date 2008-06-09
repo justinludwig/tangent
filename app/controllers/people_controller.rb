@@ -92,8 +92,11 @@ class PeopleController < ApplicationController
         @person.register!
 
         # automatically "login" if self-reg
-        if (!self.current_person)
-          self.current_person = @person unless self.current_person
+        unless (self.current_person)
+          self.current_person = @person
+          # store user data in cookie
+          remember_person_data
+          
           flash[:notice] = "Thanks for signing up!"
         else
           flash[:notice] = 'Person was successfully created.'
