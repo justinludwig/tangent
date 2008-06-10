@@ -22,7 +22,7 @@ class Person < ActiveRecord::Base
   has_many :events, :through => :event_coordinators, :uniq => true, :order => "start_date"
 
   has_many :participants, :dependent => :destroy
-  has_many :activities, :through => :participants, :uniq => true, :order => "start_date"
+  has_many :activities, :through => :participants, :uniq => true, :include => :event, :order => "events.start_date, activities.start_date"
 
   # Virtual attribute for the unencrypted password
   attr_accessor :password

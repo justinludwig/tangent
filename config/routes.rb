@@ -31,6 +31,9 @@ ActionController::Routing::Routes.draw do |map|
   map.my_events 'my/events', :controller => 'my_stuff', :action => 'events'
   map.my_events_past 'my/events/past', :controller => 'my_stuff', :action => 'events_past'
   map.my_events_upcoming 'my/events/upcoming', :controller => 'my_stuff', :action => 'events_upcoming'
+  map.my_activities 'my/activities', :controller => 'my_stuff', :action => 'activities'
+  map.my_activities_past 'my/activities/past', :controller => 'my_stuff', :action => 'activities_past'
+  map.my_activities_upcoming 'my/activities/upcoming', :controller => 'my_stuff', :action => 'activities_upcoming'
   
   # The priority is based upon order of creation: first created -> highest priority.
 

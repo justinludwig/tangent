@@ -43,7 +43,7 @@ class Participant < ActiveRecord::Base
     transitions :from => [:waiting, :invited, :tentative, :withdrawn], :to => :confirmed, :guard => Proc.new { |participant|
       activity = participant.activity
       openings = activity.openings
-      openings.blank? || activity.participants.count_in_state('confirmed').length < openings
+      openings.blank? || activity.participants.count_in_state(:confirmed) < openings
     }
   end
 

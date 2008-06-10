@@ -147,7 +147,7 @@ module ApplicationHelper
       # determine current order and ascending
       current_order = params[:order] || ''
       current_ascending = current_order !~ /-$|DESC$/
-      current_order = current_order.sub /([a-z_]+)(.*)/, '\1'
+      current_order = current_order.sub /([a-z_.,]+)(.*)/, '\1'
       current = true if order == current_order
 
       # if current, reverse ascending

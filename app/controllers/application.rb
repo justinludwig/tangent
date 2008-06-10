@@ -63,7 +63,7 @@ class ApplicationController < ActionController::Base
       order = order.sub(/\+$/, '').sub(/-$/, ' DESC')
     end
     # must be either "display_name ASC" or "display_name DESC"
-    order = default unless order =~ /^[a-z_]+(?: ASC| DESC)?$/
+    order = default unless order =~ /^[a-z_.,]+(?: ASC| DESC)?$/
     params[:order] = order
   end
 

@@ -26,11 +26,27 @@
 <table class="tbl">
 <caption>My Upcoming Activities</caption>
 <thead>
-    <tr><th>Event</th><th>Activity</th><th>Start</th><th>End</th><th class="tools">&nbsp;</th></tr>
+  <tr>
+    <th><%= link_to_order_by "Event", "events.name" %></th>
+    <th><%= link_to_order_by "Activity", "activities.name" %></th>
+    <th>Tags</th>
+    <th><%= link_to_order_by "Start", "start_date" %></th>
+    <th><%= link_to_order_by "End", "end_date" %></th>
+  </tr>
 </thead>
 <tbody>
-</tbody>
+<% for activity in @activities %>
+  <tr class="<%= cycle("", "alt") -%>">
+    <td><%= link_to h(activity.event.name), activity.event %></td>
+    <td><%= link_to h(activity.name), activity %></td>
+    <td><%=h activity.tags %></td>
+    <td><%= list_datetime (activity.start_date || activity.event.start_date) %></td>
+    <td><%= list_datetime (activity.end_date || activity.event.end_date) %></td>
+  </tr>
+<% end %>
 </table>
+<%= links_to_page @activities %>
+
 <div class="tbl-foot">
 	<%= link_to "My Past Activities", "/my/activities/past" %>
 </div>
@@ -39,7 +55,7 @@
 <caption>My Upcoming Events</caption>
 <thead>
   <tr>
-    <th><%= link_to_order_by "Name", "name" %></th>
+    <th><%= link_to_order_by "Name", "events.name" %></th>
     <th>Tags</th>
     <th><%= link_to_order_by "Start", "start_date" %></th>
     <th><%= link_to_order_by "End", "end_date" %></th>

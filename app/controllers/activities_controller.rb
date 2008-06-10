@@ -25,7 +25,12 @@ class ActivitiesController < ApplicationController
     event_id = params[:event_id]
     if event_id.blank?
         return unless has_privilege :list_activities
-        @activities = Activity.paginate :all, :page => requested_page, :order => requested_order('name'), :per_page => requested_per_page
+        
+        # special case start_date/end_date order to include both activities and events
+        order = requested_order('start_date')
+        order = "activities.#{order}, events.#{order}" if order =~ /_date/
+        
+        @activities = Activity.paginate :all, :include => :event, :page => requested_page, :order => order, :per_page => requested_per_page
         @can_edit = has_privilege? :edit_activities
         @can_delete = has_privilege? :delete_activities
 
@@ -35,7 +40,7 @@ class ActivitiesController < ApplicationController
         end
     else
         @event = Event.find(event_id)
-        @activities = @event.activities.paginate :all, :page => requested_page, :order => requested_order('name'), :per_page => requested_per_page
+        @activities = @event.activities.paginate :all, :page => requested_page, :order => requested_order('start_date'), :per_page => requested_per_page
         return unless has_privilege_for_event @event, :view_activities
 
         @can_edit = has_privilege_for_event? @event, :edit_activities

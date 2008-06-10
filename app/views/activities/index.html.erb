@@ -18,17 +18,23 @@
 ## 02110-1301, USA.
 -%>
 
-<% @page_title = @event.blank? ? "Activities" : "Activities for #{@event.name}" %>
+<% @page_title ||= @event.blank? ? "Activities" : "Activities for #{@event.name}" %>
 
 <h1><%=h @page_title %></h1>
 
 <table class="tbl">
 <thead>
   <tr>
+  <% if @event %>
     <th><%= link_to_order_by "Name", "name" %></th>
     <th>Tags</th>
     <th>Criteria</th>
     <th>Openings</th>
+  <% else %>
+    <th><%= link_to_order_by "Event", "events.name" %></th>
+    <th><%= link_to_order_by "Activity", "activities.name" %></th>
+    <th>Tags</th>
+  <% end %>
     <th><%= link_to_order_by "Start", "start_date" %></th>
     <th><%= link_to_order_by "End", "end_date" %></th>
     <th class="tools">&nbsp;</th>
@@ -37,12 +43,20 @@
 <tbody>
 <% for activity in @activities %>
   <tr class="<%= cycle("", "alt") -%>">
+  <% if @event %>
     <td><%= link_to h(activity.name), activity %></td>
     <td><%=h activity.tags %></td>
     <td><%=h activity.criteria %></td>
     <td><%=h activity.openings %></td>
     <td><%= list_datetime activity.start_date %></td>
     <td><%= list_datetime activity.end_date %></td>
+  <% else %>
+    <td><%= link_to h(activity.event.name), activity.event %></td>
+    <td><%= link_to h(activity.name), activity %></td>
+    <td><%=h activity.tags %></td>
+    <td><%= list_datetime (activity.start_date || activity.event.start_date) %></td>
+    <td><%= list_datetime (activity.end_date || activity.event.end_date) %></td>
+  <% end %>
     <td class="tools">
       <%= link_to titled_image_tag("silk/page_edit.png", :alt => "Edit"), edit_activity_path(activity) if @can_edit %>
 	  <%= link_to_delete activity if @can_delete %>
