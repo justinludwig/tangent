@@ -22,7 +22,7 @@
 
 <h1><%=h @activity.name %> for <%=h @event.name %></h1>
 
-
+<!-- event info -->
 
 <% fields_for(@event, :builder => ApplicationFormBuilder) do |f| %>
 
@@ -36,6 +36,8 @@
 </fieldset>
 
 <% end %>
+
+<!-- activity info -->
 
 <% fields_for(@activity, :builder => ApplicationFormBuilder) do |f| %>
 
@@ -56,6 +58,8 @@
 <%= styled_button_to 'Edit', edit_activity_path(@activity), :method => "get", :style => "width:6em;" %>
 </div>
 <% end %>
+
+<!-- my participation info -->
 
 <fieldset>
   <legend>My Participation</legend>
@@ -80,7 +84,11 @@
 <% end %>
 <% end %>
 
+<!-- activity details -->
+
 <%= sanitize @activity.details %>
+
+<!-- participants list -->
 
 <% if has_privilege_for_event? @event, :view_participants %>
 <table class="tbl">

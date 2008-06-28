@@ -38,9 +38,10 @@ class MyStuffController < ApplicationController
     end
     activities_order = activities_order.split(/,/).map { |i| "#{i} #{direction}" }.join(',') if direction
     events_order = events_order.split(/,/).map { |i| "#{i} #{direction}" }.join(',') if direction
-    
-    @activities = current_person.activities.paginate :all, :include => :event, :page => requested_page, :order => activities_order, :per_page => requested_per_page
-    @events = current_person.events.paginate :all, :page => requested_page, :order => events_order, :per_page => requested_per_page, :conditions => "start_date > '#{Time.now.utc.to_s :db}'"
+
+    now = Time.now.utc.to_s :db
+    @activities = current_person.activities.paginate :all, :include => :event, :page => requested_page, :order => activities_order, :per_page => requested_per_page, :conditions => "events.start_date > '#{now}' or activities.start_date > '#{now}'"
+    @events = current_person.events.paginate :all, :page => requested_page, :order => events_order, :per_page => requested_per_page, :conditions => "start_date > '#{now}'"
 
     respond_to do |format|
       format.html # index.html.erb
