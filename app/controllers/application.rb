@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   include PrivilegedSystem
   
   # sliding_sessions
-  REMEMBER_ME_EXPIRES = 4.months
+  REMEMBER_ME_EXPIRES = eval AppConfig.remember_me_expires
   session :session_expires_after => REMEMBER_ME_EXPIRES
   
   helper :all # include all helpers, all the time
@@ -40,6 +40,13 @@ class ApplicationController < ActionController::Base
         :value => "id:#{current_person.id},name:'#{js_name}'",
         :expires => Time.now + REMEMBER_ME_EXPIRES 
       }
+      session[:auth_expires] = Time.now + REMEMBER_ME_EXPIRES if params[:remember_me]
+  end
+
+  # forget person data from cookie
+  def forget_person_data
+    cookies[:tangent_person] = { :value => "", :expires => Time.now - 1.year }
+    reset_session
   end
 
   def requested_page(default = 1)
