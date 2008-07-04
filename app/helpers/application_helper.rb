@@ -120,23 +120,43 @@ module ApplicationHelper
 
   # link tags
   
-  def titled_image_tag(source, options = {})
-    options[:title] = options[:alt] unless options[:title]
-    image_tag source, options
-  end
-  
-  def confirmed_image_link_to(url, method, icon, alt, msg, title)
+  def confirmed_link_to(url, method, label, msg, title = 'Confirm', ok_button = label)
       link_to_function(
-        titled_image_tag(icon, :alt => alt),
-        "App.confirm('#{msg}', { text: '#{alt}', handler: function() { App.controllerRequest('#{method}', '#{url}') } }, null, '#{title}');",
+        label,
+        "App.confirm('#{msg}', { text: '#{ok_button}', handler: function() { App.controllerRequest('#{method}', '#{url}') } }, null, '#{title}');",
         :href => url
       )
   end
   
-  def link_to_delete(model)
+  def confirmed_image_link_to(url, method, icon, alt, msg, title = 'Confirm', ok_button = alt)
+      confirmed_link_to url, method, titled_image_tag(icon, :alt => alt), msg, title = 'Confirm', ok_button
+  end
+
+  def link_to_delete(model, icon = true)
+      url = url_for model
+      method = 'delete'
+      label = 'Delete'
       type = model.class.table_name.humanize.downcase.singularize
-      msg = "Are you sure you want to delete this #{type}?"
-      confirmed_image_link_to url_for(model), "delete", "silk/cross.png", "Delete", msg, "Confirm Delete"
+      msg = "Are you sure you want to delete this #{type}? It is permanent, and cannot be undone. (You can always create a new one, though!)"
+      title = 'Confirm Delete'
+
+      if icon
+        confirmed_image_link_to url, method, "silk/cross.png", label, msg, title
+      else
+        confirmed_link_to url, method, label, msg, title
+      end
+  end
+
+  def text_link_to_delete(model)
+    link_to_delete model, false
+  end
+
+  def icon_link_to_delete(model)
+    link_to_delete model
+  end
+
+  def icon_link_to_edit(model)
+    link_to titled_image_tag("silk/page_edit.png", :alt => "Edit"), edit_polymorphic_path(person) 
   end
 
   def links_to_page(model)
@@ -163,7 +183,16 @@ module ApplicationHelper
       html
   end
 
+  def link_to_array(models)
+    models.map { |m| link_to m, m } .join ', '
+  end
+
   # output tags
+  
+  def titled_image_tag(source, options = {})
+    options[:title] = options[:alt] unless options[:title]
+    image_tag source, options
+  end
   
   def formatted_datetime(date)
     return "" unless date
@@ -173,10 +202,6 @@ module ApplicationHelper
   def list_datetime(date)
     return "" unless date
     date.strftime '%m/%d/%Y %I:%M %p'
-  end
-
-  def link_to_array(models)
-    models.map { |m| link_to m, m } .join ', '
   end
 
 end

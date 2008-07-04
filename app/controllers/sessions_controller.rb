@@ -27,6 +27,10 @@ class SessionsController < ApplicationController
     redirect_to(@person)
   end
 
+  def index
+    show
+  end
+
   # GET /session/new
   # GET /session/new.xml
   def new
@@ -41,7 +45,6 @@ class SessionsController < ApplicationController
   def create
     self.current_person = Person.authenticate(params[:login], params[:password])
     if logged_in?
-      session[:auth_expires] = Time.now + REMEMBER_ME_EXPIRES if params[:remember_me]
       remember_person_data
       
       flash[:notice] = "Welcome back, #{current_person.display_name}!"
@@ -53,8 +56,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    cookies[:tangent_person] = { :value => "", :expires => Time.now - 1.year }
-    reset_session
+    forget_person_data
     flash[:notice] = "You have been logged out."
     redirect_back_or_default('/')
   end

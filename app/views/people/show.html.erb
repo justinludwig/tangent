@@ -20,9 +20,14 @@
 
 <% @page_title = @person.display_name %>
 
+<div class="h-container">
 <h1><%=h @person.display_name %></h1>
-
-<p><%= link_to "Email #{h(@person.display_name)}", email_person_path(@person) %></p>
+<span class="h1-tools">
+  <%= link_to "Edit", edit_person_path(@person) if has_privilege_for_person? @person, :edit_person, :edit_self %>
+  <%= text_link_to_delete @person if has_privilege_for_person? @person, :delete_person, :delete_self %>
+  <%= link_to "Email", email_person_path(@person) if (@person != current_person) && (@person.state == 'active') %>
+</span>
+</div>
 
 <% fields_for(@person, :builder => ApplicationFormBuilder) do |f| %>
 

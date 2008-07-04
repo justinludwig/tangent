@@ -42,13 +42,9 @@
     <%= link_to "Tangent", "/" %>
 <% if logged_in? %>
     &nbsp;|&nbsp;
-    <%= link_to_unless_current "Events", events_path %>
-    &nbsp;|&nbsp;
-    <%= link_to_unless_current "People", people_path %>
-    &nbsp;|&nbsp;
     <%= link_to_unless_current "My Stuff", my_stuff_path %>
     &nbsp;|&nbsp;
-    <%= link_to_unless_current "My Profile", edit_person_path(current_person) %>
+    <%= link_to_unless_current "My Profile", person_path(current_person) %>
 <% end %>
 </span>
 <span class="r">

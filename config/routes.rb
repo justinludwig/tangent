@@ -28,6 +28,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   
   map.my_stuff 'my', :controller => 'my_stuff'
+  map.my_stuff2 'my/stuff', :controller => 'my_stuff'
+  map.my_profile 'my/profile', :controller => 'sessions'
   map.my_events 'my/events', :controller => 'my_stuff', :action => 'events'
   map.my_events_past 'my/events/past', :controller => 'my_stuff', :action => 'events_past'
   map.my_events_upcoming 'my/events/upcoming', :controller => 'my_stuff', :action => 'events_upcoming'

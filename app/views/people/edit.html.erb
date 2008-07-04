@@ -18,16 +18,9 @@
 ## 02110-1301, USA.
 -%>
 
-<% if @person == current_person %>
-    <% @page_title = "My Profile" %>
-    <h1>My Profile</h1>
+<% @page_title = "Edit #{@person}" %>
 
-<% else %>
-    <% @page_title = "Edit " << @person.display_name %>
-    <h1>Edit <%=h @person.display_name %></h1>
-<% end %>
-
-<p><%= link_to 'View Public Profile Page', @person %></p>
+<h1>Edit <%= link_to @person, @person %></h1>
 
 <%= error_messages_for :person %>
 

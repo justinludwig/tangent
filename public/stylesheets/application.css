@@ -297,14 +297,29 @@ label.checkbox, label.radio {
     text-align: left;
 }
 
+.h-container {
+    overflow: hidden;
+    zoom: 1;
+}
+.h-container h1 {
+    float: left;
+}
+.h-container .h1-tools {
+    position: relative;
+    left: 1em;
+    top: 1.5em;
+    font-size: 0.9em;
+}
+.h-container .h1-tools a {
+    padding: 0.2em;
+}
+
 .lr-container {
     position: relative;
 }
-
 .lr-container .l {
     display: block;
 }
-
 .lr-container .r {
     position: absolute;
     display: block;
