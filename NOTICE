@@ -27,6 +27,8 @@ This program also includes software and content authored by the following:
   - acts_as_state_machine plugin (http://elitists.textdriven.com/svn/plugins/acts_as_state_machine)
 * PJ Hyett and Mislav Marohnić
   - will_paginate plugin (http://github.com/mislav/will_paginate/)
+* Stephen Chu
+  - action_mailer_tls plugin (http://www.stephenchu.com/2006/06/how-to-use-gmail-smtp-server-to-send.html)
 * Paweł Stradomski
   - sliding_sessions plugin (http://squarewheel.wordpress.com/2007/11/03/session-cookie-expiration-time-in-rails/)
 * Yahoo! Inc

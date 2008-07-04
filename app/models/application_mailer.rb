@@ -16,29 +16,24 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
-class PersonMailer < ApplicationMailer
-  def signup_notification(person)
-    setup_email person
-    subject "Welcome to #{AppConfig.name}"
-    @body.merge! :why => " that your account was created"
-  end
-  
-  def activation(person)
-    setup_email person
-    subject "Your #{AppConfig.name} account has been activated"
-  end
-
-  def personal_email(to, from, the_subject, the_body)
-    setup_email to
-    subject the_subject
-    reply_to %{"#{from.display_name.gsub /"/, '\''}" <#{from.email}>}
-    @body.merge! :from => from, :body => the_body, :why => " of a personal message from #{from.display_name} (you can view this person's profile at <#{person_url from, :only_path => false}>)"
-  end
+class ApplicationMailer < ActionMailer::Base
   
   protected
-    def setup_email(person)
-      set_defaults
-      recipients %{"#{person.display_name.gsub /"/, '\''}" <#{person.email}>}
-      body :person => person
+    def set_defaults
+      set_smtp_settings
+      from %{"#{AppConfig.email_from_name}" <#{ActionMailer::Base.smtp_settings[:user_name]}>}
+      sent_on Time.now
     end
+    
+    def set_smtp_settings
+      rotate = ActionMailer::Base.smtp_settings[:rotate]
+      return if rotate.nil? || rotate < 1
+      rotate_start = ActionMailer::Base.smtp_settings[:rotate_start] || 1
+
+      # rotate among #{rotate} number of addresses, starting with #{rotate_start}
+      number = rand(rotate).floor + rotate_start
+      # replace trailing number from username, if it exists (otherwise just add a trailer)
+      ActionMailer::Base.smtp_settings[:user_name].sub! /\d*@/, "#{number}@"
+    end
+
 end

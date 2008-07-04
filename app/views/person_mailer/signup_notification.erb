@@ -18,11 +18,18 @@
 ## 02110-1301, USA.
 -%>
 
-Your account has been created.
+Hi <%= @person.display_name %>,
 
-  Login Name: <%= @person.email %>
-  Password: <%= @person.password %>
+Welcome to <%= AppConfig.name %>! We've created a new account for you. Use the following credentials to login:
 
-Visit this url to activate your account:
+    Email: <%= @person.email %>
+    Password: <%= @person.password %>
 
-  <%= @url %>
+You can check the activities for which you've signed up (and the events you coordinate) on your My Stuff page at <<%= AppConfig.base_url %>my>.
+
+Enjoy,
+
+The <%= AppConfig.name %> team
+<<%= AppConfig.contact_email %>>
+
+<%= render :partial => 'mailer/footer' %>

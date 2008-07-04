@@ -71,6 +71,7 @@ module PrivilegedSystem
       :view_self,
       :edit_self,
       :delete_self,
+      :email_people,
       # events
       :create_events,
       :list_events_coordinated_for_self,

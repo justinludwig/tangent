@@ -1,0 +1,38 @@
+<%
+## Tangent, an online sign-up sheet
+## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
+## 
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+## 02110-1301, USA.
+-%>
+
+
+----------------
+
+*Why did I receive this email?*
+
+    You have a <%= AppConfig.name %> account at <<%= AppConfig.base_url %>>. This email message was sent automatically to notify you<%= @why %>.
+
+*How can I unsubscribe?*
+
+    These email notifications will be sent to you automatically as long as you have an account with <%= AppConfig.name %>. You can delete your account by going to your My Profile page at <<%= AppConfig.base_url %>my/profile>, logging in, and clicking the Delete link.
+
+*Where can I get more information?*
+
+    You can find more information about <%= AppConfig.name %> on our About page at <<%= AppConfig.base_url %>about>. You can read our full privacy policy (including our commitment to sending you only pertinent emails, and to guard your email address) on our Privacy Policy page at <<%= AppConfig.base_url %>privacy>.
+
+*Who can I ask if I have further questions?*
+
+    You can contact the <%= AppConfig.name %> team by sending an email to <<%= AppConfig.contact_email %>>.

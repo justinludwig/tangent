@@ -111,6 +111,14 @@ class Person < ActiveRecord::Base
     
     def do_delete
       self.deleted_at = Time.now.utc
+
+      # purge all personal information
+      self.display_name = 'Deleted Person'
+      self.email = nil
+      self.crypted_password = nil
+      self.salt = nil
+      # save without validation
+      self.save false
     end
 
     def do_activate

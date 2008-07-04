@@ -65,22 +65,6 @@ class PeopleController < ApplicationController
 
   # POST /people
   # POST /people.xml
-=begin
-  def create
-    @person = Person.new(params[:person])
-
-    respond_to do |format|
-      if @person.save
-        flash[:notice] = 'Person was successfully created.'
-        format.html { redirect_to(@person) }
-        format.xml  { render :xml => @person, :status => :created, :location => @person }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-=end
   def create
     return unless has_privilege :create_people
 
@@ -99,7 +83,7 @@ class PeopleController < ApplicationController
           
           flash[:notice] = "Thanks for signing up!"
         else
-          flash[:notice] = 'Person was successfully created.'
+          flash[:notice] = 'Person has been successfully created.'
         end
 
         format.html { redirect_back_or_default(@person) }
@@ -111,24 +95,6 @@ class PeopleController < ApplicationController
       end
     end
   end
-=begin
-  def create
-    cookies.delete :auth_token
-    # protects against session fixation attacks, wreaks havoc with 
-    # request forgery protection.
-    # uncomment at your own risk
-    # reset_session
-    @person = Person.new(params[:person])
-    @person.register! if @person.valid?
-    if @person.errors.empty?
-      self.current_person = @person
-      redirect_back_or_default('/')
-      flash[:notice] = "Thanks for signing up!"
-    else
-      render :action => 'new'
-    end
-  end
-=end
 
   # PUT /people/1
   # PUT /people/1.xml
@@ -138,7 +104,7 @@ class PeopleController < ApplicationController
 
     respond_to do |format|
       if @person.update_attributes(params[:person])
-        flash[:notice] = 'Person was successfully updated.'
+        flash[:notice] = 'Person has been successfully updated.'
         format.html { redirect_to(@person) }
         format.xml  { head :ok }
       else
@@ -153,11 +119,14 @@ class PeopleController < ApplicationController
   def destroy
     @person = Person.find(params[:id])
     return unless has_privilege_for_person @person, :delete_people, :delete_self
+    delete_self = @person == current_person
 
     @person.delete!
+    forget_person_data if delete_self
+    flash[:notice] = (delete_self ? 'Your account' : 'Person') + ' has been deleted.'
 
     respond_to do |format|
-      format.html { redirect_to(people_url) }
+      format.html { redirect_to(delete_self ? new_person_path : people_path) }
       format.xml  { head :ok }
     end
   end
@@ -167,29 +136,30 @@ class PeopleController < ApplicationController
   def email
     return unless has_privilege :email_people
 
-    # todo create email.html.erb
     @person = Person.find(params[:id])
   end
   
   # POST /people/1/send_email
   # POST /people/1/send_email.xml
   def send_email
-    return unless has_privilege :email_people
-
     @person = Person.find(params[:id])
-=begin
+    return unless (has_privilege :email_people) && (@person.state == 'active')
+
+    subject, body = params[:subject], params[:body]
+    error = 'Please specify a body' if body.blank?
+    error = 'Please specify a subject' if subject.blank?
+
     respond_to do |format|
-      # todo
-      if PersonMailer.deliver_personal_email(person, current_person, subject, body)
-        flash[:notice] = 'Your email was sent.'
+      if !error && PersonMailer.deliver_personal_email(@person, current_person, subject, body)
+        flash[:notice] = 'Your email has been sent.'
         format.html { redirect_to(@person) }
         format.xml  { head :ok }
       else
+        flash[:error] = error
         format.html { render :action => "email" }
-        format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => error, :status => :unprocessable_entity }
       end
     end
-=end
   end
 
 end
