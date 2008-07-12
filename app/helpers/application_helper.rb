@@ -183,6 +183,10 @@ module ApplicationHelper
       html
   end
 
+  def link_to_object(object)
+    link_to object, object
+  end
+
   def link_to_array(models)
     models.map { |m| link_to m, m } .join ', '
   end

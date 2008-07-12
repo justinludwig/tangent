@@ -1,0 +1,35 @@
+<%
+## Tangent, an online sign-up sheet
+## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
+## 
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+## 02110-1301, USA.
+-%>
+
+<% @page_title = "Sign Up to #{@activity.name} for #{@event.name}" %>
+
+<h1>Sign Up to <%= link_to_object @activity %> for <%= link_to_object @event %></h1>
+
+<p>Welcome back, <%=h @person %>. Just enter your <%=h AppConfig.name %> password, and we'll sign you up.
+
+<% form_tag sign_up_activity_participants_path(@activity) do %>
+
+<%= property_line_tag text_tag(@person.email, :class=> 'medium'), 'email', :label => 'Email' %>
+<%= hidden_field_tag 'email', @person.email %>
+<%= property_line_tag password_field_tag('password', nil, :class => 'medium'), 'password', :description => link_to('I Forgot', '/forgot_password') %>
+<%= property_line_tag labeled_check_box_tag('remember_me', nil, false), 'remember_me', :label => :none %>
+<%= property_line_tag styled_submit_tag('Sign Up', :style => 'width:7em;'), 'submit', :label => :none %>
+
+<% end %>

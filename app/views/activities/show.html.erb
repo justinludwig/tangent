@@ -68,13 +68,13 @@
 <% if logged_in? %>
 </fieldset>
 <div class="buttons">
-  <%= styled_button_to 'Sign Up', confirm_activity_participants_path(@activity), :style => "width:8em;" %>
+  <%= styled_button_to 'Sign Up', sign_up_activity_participants_path(@activity), :style => "width:8em;" %>
 </div>
 
 <% else %>
-<% form_tag confirm_activity_participants_path(@activity) do %>
+<% form_tag sign_up_activity_participants_path(@activity) do %>
 
-<%= property_line_tag text_field_tag("email", nil, :class=> "medium"), "email", :required => true, :label => "Email" %>
+<%= property_line_tag text_field_tag("email", params[:email], :class=> "medium"), "email", :required => true, :label => "Email" %>
 
 </fieldset>
 <div class="buttons">

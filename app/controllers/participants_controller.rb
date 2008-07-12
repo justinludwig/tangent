@@ -108,52 +108,96 @@ class ParticipantsController < ApplicationController
     end
   end
 
-  # confirm self
-  def confirm
-    @activity = Activity.find(params[:activity_id])
-    begin
-      @participant = @activity.participants.find_by_person_id current_person.id if logged_in?
-    rescue ActiveRecord::RecordNotFound
+  # sign-up as:
+  # authenticated person
+  # un-authenticated but registered person
+  # un-authenticated and un-registered person
+  def sign_up
+    unless logged_in?
+      email = params[:email]
+      password = params[:password]
+
+      # check if registered, active person
+      @person = Person.find_in_state :first, :active, :conditions => {:email => email}
+      @activity = Activity.find params[:activity_id]
+
+      # if new person, register
+      if @person.nil?
+        return unless has_privilege :create_people
+
+        # create new person with some defaults (use first part of email for display name)
+        @person = Person.new params
+        @person.display_name = /[^@]*/.match(email || '')[0] unless params[:display_name]
+        @person.random_password unless password
+
+        # save first, then state-transitions (register!) will work
+        if @person.save
+          @person.register!
+
+        else
+          # error saving: return to activity page with email filled-in
+          flash[:error] = @person.errors.full_messages.join '; '
+          return respond_to do |format|
+            format.html { redirect_to "#{url_for @activity}?email=#{email}" }
+            format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+          end
+        end
+
+      # if registered, make person specify correct password
+      elsif !@person.authenticated? password
+        @event = @activity.event
+        flash[:error] = 'Wrong password.' unless password.blank?
+        
+        return respond_to do |format|
+          format.html # sign_up.html.erb
+          format.xml { request_http_basic_authentication AppConfig.name }
+        end
+      end
+
+      # initialize authenticated session
+      self.current_person = @person
+      remember_person_data
     end
 
-    # create new participant to confirm
-    if @participant.blank?
-      return unless has_privilege :create_participants_for_self
-      @participant = Participant.new :activity_id => @activity.id, :person_id => current_person.id
+    # confirm self
+    confirm
+  end
 
-      respond_to do |format|
-        if @participant.save
-          if @participant.confirm!
-            flash[:notice] = 'Thanks for signing-up!'
-          else
-            flash[:error] = 'Sorry, no openings left. You have been added to the wait list.'
-          end
-            
+  # confirm self
+  def confirm
+    @activity = Activity.find params[:activity_id]
+    @participant = @activity.participants.find_by_person_id current_person.id
+
+    # update existing participant
+    if @participant
+      return unless has_privilege :edit_participants_for_self
+
+    # create new participant
+    else
+      return unless has_privilege :create_participants_for_self
+
+      @participant = Participant.new :activity_id => @activity.id, :person_id => current_person.id
+      unless @participant.save
+        flash[:error] = @participant.errors.full_messages.join '; '
+        return respond_to do |format|
           format.html { redirect_to @activity }
-          format.xml  { render :xml => @participant, :status => :created, :location => @participant }
-  
-        else
-          format.html { render :action => 'show', :controller => 'activities' }
           format.xml  { render :xml => @participant.errors, :status => :unprocessable_entity }
         end
       end
 
-    # confirm existing participant
+      notice = 'Thanks for signing-up!'
+    end
+
+    # confirm participant
+    if @participant.confirm! && @participant.confirmed?
+      flash[:notice] = notice || 'Your participation is confirmed.'
     else
-      return unless has_privilege :edit_participants_for_self
-
-      respond_to do |format|
-        if @participant.confirm!
-          flash[:notice] = 'Your participation is confirmed.'
-        else
-          flash[:error] = 'Sorry, no openings left. You have been added to the wait list.'
-          @participant.wait!
-        end
-          
-        format.html { redirect_to @activity }
-        format.xml  { render :xml => @participant, :status => :ok, :location => @participant }
-
-      end
+      flash[:error] = 'Sorry, no openings left. You have been added to the wait list.'
+    end
+        
+    respond_to do |format|
+      format.html { redirect_to @activity }
+      format.xml  { render :xml => @participant, :status => :ok, :location => @participant }
     end
   end
 

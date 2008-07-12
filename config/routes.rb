@@ -20,7 +20,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :events, :has_many => :activities
   map.resources :activities do |activity|
-    activity.resources :participants, :collection => { :confirm => :post }
+    activity.resources :participants, :collection => { :sign_up => :post }
   end
   map.resources :participants
 

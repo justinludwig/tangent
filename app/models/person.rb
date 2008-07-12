@@ -77,6 +77,17 @@ class Person < ActiveRecord::Base
     display_name
   end
 
+  # characters used by random_password
+  # include all ascii chars, except ones that look similar
+  # (like zero and upper-case letter 0)
+  #RANDOM_PASSWORD_CHARACTERS = (33..126).map { |i| i.chr }.reject { |i| ['0', 'O', '1', 'I', 'l', '`'].include? i }
+  RANDOM_PASSWORD_CHARACTERS = (('0'..'9').to_a + ('A'..'Z').to_a + ('a'..'z').to_a).reject { |i| ['0', 'O', '1', 'I', 'l'].include? i }
+
+  # Generates a new random password
+  def self.random_password
+    Array.new(10) { RANDOM_PASSWORD_CHARACTERS[rand(RANDOM_PASSWORD_CHARACTERS.size)]}.join
+  end
+
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
     u = find_in_state :first, :active, :conditions => {:email => login} # need to get the salt
@@ -93,8 +104,14 @@ class Person < ActiveRecord::Base
     self.class.encrypt(password, salt)
   end
 
+  # Returns true if specified password matches user password
   def authenticated?(password)
     crypted_password == encrypt(password)
+  end
+
+  # Sets the user's password to a new random password
+  def random_password
+    @password_confirmation = @password = self.class.random_password
   end
 
   protected
