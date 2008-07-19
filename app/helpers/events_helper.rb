@@ -26,6 +26,18 @@ module EventsHelper
     return (access_denied || false) unless has_privilege_for_event? event, *privileges
     return true
   end
+  
+  # format event start_date as friendly but compact string
+  # which pairs nicely with event_endtime
+  def event_starttime(event)
+    headline_starttime event.start_date, event.end_date
+  end
+
+  # format event end_date as friendly but compact string
+  # which pairs nicely with event_starttime
+  def event_endtime(event)
+    headline_endtime event.start_date, event.end_date
+  end
 
   # format activity starte/end date as friendly but compact string
   # which fits nicely with event start/end
@@ -34,10 +46,10 @@ module EventsHelper
     s = event.start_date || Time.local(0)
     e = event.end_date || s
 
-    pattern = "%I#{e.min != 0 ? ':%M' : ''} %p"
-    pattern = "/%Y #{pattern}" if s.year != e.year
+    pattern = "%l#{e.min != 0 ? ':%M' : ''} %p"
+    pattern = "/%y #{pattern}" if s.year != e.year
     pattern = "%m/%d #{pattern}" if s.day != e.day && e > s + 1.day
-    pattern = "%a #{pattern}" if s.day != e.day
+    pattern = "%a, #{pattern}" if s.day != e.day
 
     date.strftime pattern
   end

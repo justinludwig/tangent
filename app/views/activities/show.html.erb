@@ -18,79 +18,79 @@
 ## 02110-1301, USA.
 -%>
 
-<% @page_title = "#{@activity.name} for #{@event.name}" %>
+<% @page_title = "#{@activity} for #{@event}" %>
 
-<h1><%=h @activity.name %> for <%=h @event.name %></h1>
-
-<!-- event info -->
-
-<% fields_for(@event, :builder => ApplicationFormBuilder) do |f| %>
-
-<fieldset>
-  <legend>Event Info</legend>
-<%= f.property_line :text, :name %>
-<%= f.property_line :text, :tags %>
-<%= property_line_tag link_to_array(@event.coordinators), 'coordinators' %>
-<%= f.property_line :datetime, :start_date, :label => "Start" %>
-<%= f.property_line :datetime, :end_date, :label => "End" %>
-</fieldset>
-
-<% end %>
-
-<!-- activity info -->
-
-<% fields_for(@activity, :builder => ApplicationFormBuilder) do |f| %>
-
-<fieldset>
-  <legend>Activity Info</legend>
-<%= f.property_line :text, :name %>
-<%= f.property_line :text, :tags %>
-<%= f.property_line :text, :criteria %>
-<%= f.property_line :text, :openings %>
-<%= f.property_line :datetime, :start_date, :label => "Start" %>
-<%= f.property_line :datetime, :end_date, :label => "End" %>
-</fieldset>
-
-<% end %>
-
-<% if has_privilege_for_event? @event, :edit_events %>
-<div class="buttons">
-<%= styled_button_to 'Edit', edit_activity_path(@activity), :method => "get", :style => "width:6em;" %>
-</div>
-<% end %>
-
-<!-- my participation info -->
-
-<fieldset>
-  <legend>My Participation</legend>
-<%= property_line_tag text_tag(@participant.blank? ? "Not signed-up" : @participant.state.capitalize, :class=> "medium"), "state", :label => "Status" %>
-
-<% if logged_in? %>
-</fieldset>
-<div class="buttons">
-  <%= styled_button_to 'Sign Up', sign_up_activity_participants_path(@activity), :style => "width:8em;" %>
+<div class="vevent">
+	
+<div class="h-container">
+<h1 class="summary"><%=h @activity.name %> for <%= link_to_object @event, :class => 'related-to', :rel => 'parent' %></h1>
+<span class="h1-tools">
+  <%= link_to "Edit", edit_activity_path(@activity) if has_privilege_for_activity? @activity, :edit_activity %>
+  <%= text_link_to_delete @activity if has_privilege_for_activity? @activity, :delete_activity %>
+</span>
 </div>
 
-<% else %>
-<% form_tag sign_up_activity_participants_path(@activity) do %>
+<% if @activity.activity_or_event_start_date -%>
+<div class="pre-sidebar">
+  <span class="dtstart" title="<%= @activity.activity_or_event_start_date.to_s :rfc3339 %>"><%= activity_starttime @activity %></span>
+  <% if @activity.activity_or_event_end_date -%>
+  -
+  <span class="dtend" title="<%= @activity.activity_or_event_end_date.to_s :rfc3339 %>"><%= activity_endtime @activity %></span>
+  <% end -%>
+</div>
+<% end -%>
 
-<%= property_line_tag text_field_tag("email", params[:email], :class=> "medium"), "email", :required => true, :label => "Email" %>
+<div class="sidebar">
+  <h5><%= logged_in? ? 'My Status' : 'Sign Up' %></h5>
+  <div class="content">
+  <% if logged_in? -%>
+    <div>
+      <%= @participant.blank? ? 'Not signed-up' : @participant.state.capitalize %>
+    </div>
+    <div class="buttons">
+      <%= styled_button_to 'Sign Up', sign_up_activity_participants_path(@activity), :style => "width:8em;" %>
+    </div>
 
-</fieldset>
-<div class="buttons">
-  <%= styled_submit_tag "Sign Up", :style => "width:8em;" %>
+  <% else -%>
+    <% form_tag sign_up_activity_participants_path(@activity) do -%>
+    
+    <label for="email">Email</label> <%= text_field_tag "email", params[:email], :class=> "medium" %>
+    
+    <div class="buttons">
+      <%= styled_submit_tag "Sign Up", :style => "width:8em;" %>
+    </div>
+    
+    <% end -%>
+  <% end -%>
+  </div>
 </div>
 
-<% end %>
-<% end %>
+<div class="metadata post-sidebar">
+<% unless @activity.tags.blank? -%>
+<div>
+  Tagged as <%= list_tags @activity %>
+</div>
+<% end -%>
+<% unless @activity.criteria.blank? -%>
+<div>
+  Criteria: <%= list_criteria @activity %>
+</div>
+<% end -%>
+<div>
+<% if @activity.unlimited? -%>
+  Unlimited openings
+<% else -%>
+  <%= @activity.openings %> opening<%= @activity.openings > 1 ? 's' : '' %>, <%= @activity.available %> available
+<% end -%>
+</div>
+</div>
 
-<!-- activity details -->
-
+<h4 class="under-sidebar">Details</h4>
+<div class="description content">
 <%= sanitize @activity.details %>
+</div>
 
-<!-- participants list -->
-
-<% if has_privilege_for_event? @event, :view_participants %>
+<% if has_privilege_for_activity? @activity, :view_participants %>
 <table class="tbl">
 <caption>Participants</caption>
 <thead>
@@ -101,12 +101,23 @@
 </thead>
 <tbody>
 <% for participant in @participants %>
-  <tr class="<%= cycle("", "alt") -%>">
-    <td><%= link_to h(participant.person.display_name), participant.person %></td>
-    <td><%=h participant.state.capitalize %></td>
+  <tr class="attendee <%= cycle("", "alt") -%>">
+    <td class="vcard"><%= link_to_object participant.person, :class => 'fn n url' %></td>
+    <td class="partstat"><span title="<%= partstat participant %>"><%=h participant.state.capitalize %></span></td>
   </tr>
 <% end %>
 </table>
 <%= links_to_page @participants %>
 <% end %>
+
+<div class="timestamp">
+<div>
+  Created on <span class="created" title="<%= @event.created_at.to_s :rfc3339 %>"><%= @event.created_at.to_s :full %></span>
+</div>
+<div>
+  Last modified on <span class="last-modified" title="<%= @event.updated_at.to_s :rfc3339 %>"><%= @event.updated_at.to_s :full %></span>
+</div>
+</div>
+
+</div>
 

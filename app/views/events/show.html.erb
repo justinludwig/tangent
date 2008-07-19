@@ -18,12 +18,12 @@
 ## 02110-1301, USA.
 -%>
 
-<% @page_title = @event.name %>
+<% @page_title = @event %>
 
 <div class="vevent">
 
 <div class="h-container">
-<h1 class="summary"><%=h @event.name %></h1>
+<h1 class="summary"><%=h @event %></h1>
 <span class="h1-tools">
   <%= link_to "Edit", edit_event_path(@event) if has_privilege_for_event? @event, :edit_event %>
   <%= text_link_to_delete @event if has_privilege_for_event? @event, :delete_event %>
@@ -41,13 +41,13 @@
 <% end -%>
 
 <div class="sidebar">
-  <span class="sidebar-h">Located at</span>
-  <div class="location vcard">
+  <h5>Hosted At</h5>
+  <div class="content location vcard">
     (addr)
   </div>
 </div>
 
-<div class="post-sidebar">
+<div class="metadata post-sidebar">
 <% unless @event.coordinators.blank? -%>
 <div class="vcard">
   Coordinated by <%= link_to_array @event.coordinators, :class => 'organizer fn n url' %>
@@ -61,7 +61,7 @@
 <% end -%>
 </div>
 
-<h4 class="under-sidebar">Description</h4>
+<h4 class="under-sidebar">Details</h4>
 <div class="description content">
 <%= sanitize @event.details %>
 </div>
@@ -74,10 +74,10 @@
     <th><%= link_to_order_by "Name", "name" %></th>
     <th>Tags</th>
     <th>Criteria</th>
-    <th><%= link_to_order_by "Start", "start_date" %></th>
-    <th><%= link_to_order_by "End", "end_date" %></th>
-    <th>Openings Available</th>
-    <th>My Status</th>
+    <th class="date"><%= link_to_order_by "Start", "start_date" %></th>
+    <th class="date"><%= link_to_order_by "End", "end_date" %></th>
+    <th class="number">Openings Left</th>
+    <th class="tools">My Status</th>
   </tr>
 </thead>
 <tbody>
@@ -86,10 +86,10 @@
     <td><%= link_to h(activity.name), activity %></td>
     <td><%=h activity.tags %></td>
     <td><%=h activity.criteria %></td>
-    <td><%= activity_datetime @event, activity.start_date %></td>
-    <td><%= activity_datetime @event, activity.end_date %></td>
-    <td><%= activity.available %></td>
-    <td><%= link_to h(my_status_display activity), activity if activity.available? %></td>
+    <td class="date"><%= activity_datetime @event, activity.start_date %></td>
+    <td class="date"><%= activity_datetime @event, activity.end_date %></td>
+    <td class="number"><%= activity.available %></td>
+    <td class="tools"><%= link_to h(my_status_display activity), activity if activity.available? %></td>
   </tr>
 <% end %>
 </table>

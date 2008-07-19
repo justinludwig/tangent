@@ -221,23 +221,25 @@ module ApplicationHelper
   
   # format event start_date as friendly but compact string
   # which pairs nicely with event_endtime
-  def event_starttime(event)
-    return "" unless event && event.start_date
-    date = event.start_date
-    date.strftime "%a, %b %e '%y, %l#{date.min != 0 ? ':%M' : ''} %p#{!event.end_date ? ' %Z' : ''}"
+  def headline_starttime(start_date, end_date)
+    return "" unless start_date
+    s = start_date
+    e = end_date
+    s.strftime "%a, %b %e, '%y, %l#{s.min != 0 ? ':%M' : ''} %p#{!e ? ' %Z' : ''}"
   end
 
   # format event end_date as friendly but compact string
   # which pairs nicely with event_starttime
-  def event_endtime(event)
-    return "" unless event && event.end_date
-    s = event.start_date || Time.local(0)
-    e = event.end_date
+  def headline_endtime(start_date, end_date)
+    return "" unless end_date
+    s = start_date || Time.local(0)
+    e = end_date
 
     pattern = "%l#{e.min != 0 ? ':%M' : ''} %p %Z"
-    pattern = "'%y, #{pattern}" if s.year != e.year
-    pattern = "%b %e #{pattern}" if s.day != e.day && e > s + 1.day
-    pattern = "%a, #{pattern}" if s.day != e.day
+    pattern = ", #{pattern}" if s.day != e.day || e > s + 1.day
+    pattern = ", '%y #{pattern}" if s.year != e.year
+    pattern = ", %b %e#{pattern}" if s.day != e.day && e > s + 1.day
+    pattern = "%a#{pattern}" if s.day != e.day || e > s + 1.day
 
     e.strftime pattern
   end

@@ -120,7 +120,8 @@ fieldset .tbl {
     border-width: 1px 0;
     padding: 0.1em 0.3em;
 }
-.tbl .date {
+.tbl .date, .tbl .number {
+    text-align: right;
     white-space: nowrap;
 }
 .tbl .tools {
@@ -284,6 +285,9 @@ label.checkbox, label.radio {
 
 /* panels */
 
+.metadata {
+    font-size: 0.9em;
+}
 .content {
     padding: 0.3em;
 }
@@ -357,7 +361,15 @@ label.checkbox, label.radio {
 .sidebar {
     display: block;
     float: right;
-    border: 1px solid black;
+    border: 1px solid #ccc;
+    margin-bottom: 1em;
+}
+.sidebar h5 {
+    border-bottom: 1px solid #ccc;
+    margin: 0;
+    padding: 0.2em 1em;
+}
+.sidebar .content {
     padding: 0.2em 1em;
     background-color: #efe;
 }

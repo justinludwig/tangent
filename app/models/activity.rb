@@ -42,8 +42,21 @@ class Activity < ActiveRecord::Base
 
   # number of available openings (may be INFINITY)
   def available
-    return INFINITY if openings.blank? || openings < 1
+    return INFINITY if unlimited?
     return openings - participants.count_in_state(:confirmed)
+  end
+  
+  # true if activity has unlimited openings
+  def unlimited?
+    openings.blank? || openings < 1
+  end
+  
+  def activity_or_event_start_date
+    return start_date || event.start_date
+  end
+  
+  def activity_or_event_end_date
+    return end_date || event.end_date
   end
 
 end

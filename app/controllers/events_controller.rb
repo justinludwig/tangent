@@ -77,7 +77,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        @event.activities.create :name => 'Attendee'
+        @event.activities.create :name => 'Attendee', :details => '80% of success is just showing up!'
 
         flash[:notice] = 'Event was successfully created.'
         format.html { redirect_to(@event) }
