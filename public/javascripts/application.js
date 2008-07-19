@@ -22,6 +22,11 @@ var App = {
 contextPath: "",
 
 /**
+ * IE version; zero if not ie.
+ */
+ie: 0,
+
+/**
  * Init app javascript.
  */
 init: function() {
@@ -34,6 +39,10 @@ init: function() {
 
             var query = YAHOO.util.Selector.query;
             YAHOO.util.Event.onDOMReady(function() {
+                // add hook for ie-specific css
+                if (App.ie)
+                    YAHOO.util.Dom.addClass(document.body, "ie ie" + parseInt(App.ie));
+
                 // init yui-push-buttons
                 for (var i = 0, e, elements = query("span.yui-push-button"); e = elements[i]; i++)
                     new YAHOO.widget.Button(e);
@@ -489,6 +498,13 @@ prompt: function(msg, dflt, ok, cancel, title, input) {
 }
 
 }; // end App
+
+// use conditional comments to ignore browsers that lie and claim to be ie
+/*@cc_on
+App.ie = parseFloat(navigator.userAgent.match(/MSIE[^\d]*(\d+\.\d+)/)[1]);
+@*/
+
+
 
 /** Date-picker functionality. */
 App.Cal = {

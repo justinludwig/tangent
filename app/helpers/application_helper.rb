@@ -183,12 +183,12 @@ module ApplicationHelper
       html
   end
 
-  def link_to_object(object)
-    link_to object, object
+  def link_to_object(object, options = {})
+    link_to h(object), object, options
   end
 
-  def link_to_array(models)
-    models.map { |m| link_to m, m } .join ', '
+  def link_to_array(models, options = {})
+    models.map { |m| link_to h(m), m, options } .join ', '
   end
 
   # output tags
@@ -197,15 +197,49 @@ module ApplicationHelper
     options[:title] = options[:alt] unless options[:title]
     image_tag source, options
   end
+
+  def list_tags(model)
+    model.tags.split(/,/).map { |i|
+      content_tag 'span', h(i), :class => 'category'
+    }.join(',') unless model.tags.blank?
+=begin
+      content_tag 'ol', model.tags.split(/,/).inject('') { |m, i|
+          m << content_tag('li', h(i), :class => 'category')
+      } unless model.tags.blank?
+=end
+  end
   
   def formatted_datetime(date)
     return "" unless date
-    date.strftime '%A, %B %e, %Y at %l:%M %p %Z'
+    date.to_s :full
   end
   
   def list_datetime(date)
     return "" unless date
-    date.strftime '%m/%d/%Y %I:%M %p'
+    date.to_s :list
+  end
+  
+  # format event start_date as friendly but compact string
+  # which pairs nicely with event_endtime
+  def event_starttime(event)
+    return "" unless event && event.start_date
+    date = event.start_date
+    date.strftime "%a, %b %e '%y, %l#{date.min != 0 ? ':%M' : ''} %p#{!event.end_date ? ' %Z' : ''}"
+  end
+
+  # format event end_date as friendly but compact string
+  # which pairs nicely with event_starttime
+  def event_endtime(event)
+    return "" unless event && event.end_date
+    s = event.start_date || Time.local(0)
+    e = event.end_date
+
+    pattern = "%l#{e.min != 0 ? ':%M' : ''} %p %Z"
+    pattern = "'%y, #{pattern}" if s.year != e.year
+    pattern = "%b %e #{pattern}" if s.day != e.day && e > s + 1.day
+    pattern = "%a, #{pattern}" if s.day != e.day
+
+    e.strftime pattern
   end
 
 end

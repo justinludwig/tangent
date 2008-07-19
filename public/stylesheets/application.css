@@ -42,6 +42,10 @@ h3 {
     font-size: 1.3em;
 }
 h4 {
+    border: 1px solid #ccc;
+    margin-top: 1em;
+    padding: 0.3em 0.5em;
+    background-color: #eef;
     font-size: 1.1em;
 }
 h5 {
@@ -91,9 +95,19 @@ fieldset .tbl {
     margin: 0.5em;
 }
 .tbl caption {
-    padding: 0.5em 0.3em;
+    border: 1px solid #ccc;
+    margin-top: 1em;
+    padding: 0.3em 0.5em;
+    background-color: #eef;
     font-size: 1.1em;
     font-weight: bold;
+}
+/* hack: ie ignores caption margin; ff applies table margin between caption and table */
+.ie .tbl {
+    margin-top: 1em;
+}
+.ie .tbl .caption {
+    margin: 0;
 }
 .tbl th {
     border: solid #ccc;
@@ -270,6 +284,16 @@ label.checkbox, label.radio {
 
 /* panels */
 
+.content {
+    padding: 0.3em;
+}
+.timestamp {
+    margin-top: 1em;
+    padding: 0.3em;
+    font-size: 0.7em;
+    text-align: right;
+}
+
 .pagination {
     padding: 0.5em;
     text-align: center;
@@ -325,6 +349,27 @@ label.checkbox, label.radio {
     display: block;
     top: 0;
     right: 0;
+}
+
+.pre-sidebar {
+    float: left;
+}
+.sidebar {
+    display: block;
+    float: right;
+    border: 1px solid black;
+    padding: 0.2em 1em;
+    background-color: #efe;
+}
+.post-sidebar {
+    clear: left;
+    padding-top: 1em;
+}
+.under-sidebar {
+    clear: both;
+}
+
+.h-section, .tbl .h-section {
 }
 
 /* dialogs */

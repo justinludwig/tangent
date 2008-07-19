@@ -40,11 +40,7 @@ class Participant < ActiveRecord::Base
   end
 
   event :confirm do
-    transitions :from => [:waiting, :invited, :tentative, :withdrawn], :to => :confirmed, :guard => Proc.new { |participant|
-      activity = participant.activity
-      openings = activity.openings
-      openings.blank? || activity.participants.count_in_state(:confirmed) < openings
-    }
+    transitions :from => [:waiting, :invited, :tentative, :withdrawn], :to => :confirmed, :guard => Proc.new { |participant| participant.activity.available? }
   end
 
   event :withdraw do

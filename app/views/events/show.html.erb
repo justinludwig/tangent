@@ -20,22 +20,51 @@
 
 <% @page_title = @event.name %>
 
-<h1><%=h @event.name %></h1>
+<div class="vevent">
 
-<% fields_for(@event, :builder => ApplicationFormBuilder) do |f| %>
+<div class="h-container">
+<h1 class="summary"><%=h @event.name %></h1>
+<span class="h1-tools">
+  <%= link_to "Edit", edit_event_path(@event) if has_privilege_for_event? @event, :edit_event %>
+  <%= text_link_to_delete @event if has_privilege_for_event? @event, :delete_event %>
+</span>
+</div>
 
-<fieldset>
-  <legend>Event Info</legend>
-<%= f.property_line :text, :name %>
-<%= f.property_line :text, :tags %>
-<%= property_line_tag link_to_array(@event.coordinators), 'coordinators' %>
-<%= f.property_line :datetime, :start_date, :label => "Start" %>
-<%= f.property_line :datetime, :end_date, :label => "End" %>
-</fieldset>
+<% if @event.start_date -%>
+<div class="pre-sidebar">
+  <span class="dtstart" title="<%= @event.start_date.to_s :rfc3339 %>"><%= event_starttime @event %></span>
+  <% if @event.end_date -%>
+  -
+  <span class="dtend" title="<%= @event.end_date.to_s :rfc3339 %>"><%= event_endtime @event %></span>
+  <% end -%>
+</div>
+<% end -%>
 
-<% end %>
+<div class="sidebar">
+  <span class="sidebar-h">Located at</span>
+  <div class="location vcard">
+    (addr)
+  </div>
+</div>
 
+<div class="post-sidebar">
+<% unless @event.coordinators.blank? -%>
+<div class="vcard">
+  Coordinated by <%= link_to_array @event.coordinators, :class => 'organizer fn n url' %>
+</div>
+<% end -%>
+
+<% unless @event.tags.blank? -%>
+<div>
+  Tagged as <%= list_tags @event %>
+</div>
+<% end -%>
+</div>
+
+<h4 class="under-sidebar">Description</h4>
+<div class="description content">
 <%= sanitize @event.details %>
+</div>
 
 <% if has_privilege? :view_activities %>
 <table class="tbl">
@@ -45,9 +74,10 @@
     <th><%= link_to_order_by "Name", "name" %></th>
     <th>Tags</th>
     <th>Criteria</th>
-    <th>Openings</th>
     <th><%= link_to_order_by "Start", "start_date" %></th>
     <th><%= link_to_order_by "End", "end_date" %></th>
+    <th>Openings Available</th>
+    <th>My Status</th>
   </tr>
 </thead>
 <tbody>
@@ -56,17 +86,23 @@
     <td><%= link_to h(activity.name), activity %></td>
     <td><%=h activity.tags %></td>
     <td><%=h activity.criteria %></td>
-    <td><%=h activity.openings %></td>
-    <td><%= list_datetime activity.start_date %></td>
-    <td><%= list_datetime activity.end_date %></td>
+    <td><%= activity_datetime @event, activity.start_date %></td>
+    <td><%= activity_datetime @event, activity.end_date %></td>
+    <td><%= activity.available %></td>
+    <td><%= link_to h(my_status_display activity), activity if activity.available? %></td>
   </tr>
 <% end %>
 </table>
 <%= links_to_page @activities %>
 <% end %>
 
-<div class="buttons">
-<% if has_privilege_for_event? @event, :edit_events %>
-<%= styled_button_to 'Edit', edit_event_path(@event), :method => "get", :style => "width:6em;" %>
-<% end %>
+<div class="timestamp">
+<div>
+  Created on <span class="created" title="<%= @event.created_at.to_s :rfc3339 %>"><%= @event.created_at.to_s :full %></span>
+</div>
+<div>
+  Last modified on <span class="last-modified" title="<%= @event.updated_at.to_s :rfc3339 %>"><%= @event.updated_at.to_s :full %></span>
+</div>
+</div>
+
 </div>

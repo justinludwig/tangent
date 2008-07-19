@@ -28,9 +28,22 @@ class Activity < ActiveRecord::Base
   validates_length_of :criteria, :maximum => 100, :allow_blank => true
   validates_length_of :tags, :maximum => 100, :allow_blank => true
 
+  INFINITY = 1.0/0
+
   # override toString with activity name
   def to_s
     name
+  end
+
+  # true if activity has available openings
+  def available?
+    available > 0
+  end
+
+  # number of available openings (may be INFINITY)
+  def available
+    return INFINITY if openings.blank? || openings < 1
+    return openings - participants.count_in_state(:confirmed)
   end
 
 end
