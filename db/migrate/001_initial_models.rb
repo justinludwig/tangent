@@ -23,10 +23,9 @@ class InitialModels < ActiveRecord::Migration
       t.column :display_name,              :string, :limit => 50
       t.column :crypted_password,          :string, :limit => 50
       t.column :salt,                      :string, :limit => 50
-      t.column :created_at,                :datetime
-      t.column :updated_at,                :datetime
       t.column :state, :string, :limit => 20, :null => :no, :default => 'passive'
       t.column :deleted_at,                :datetime
+      t.timestamps
     end
 
     create_table :events do |t|
@@ -52,6 +51,7 @@ class InitialModels < ActiveRecord::Migration
       t.datetime :start_date
       t.datetime :end_date
       t.string :tags, :limit => 100
+      t.timestamps
     end
 
     create_table :participants do |t|

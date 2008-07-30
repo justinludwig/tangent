@@ -122,7 +122,7 @@ class ActivitiesController < ApplicationController
     respond_to do |format|
       if @activity.update_attributes(params[:activity])
         flash[:notice] = 'Activity was successfully updated.'
-        format.html { redirect_to edit_event_path(@event) }
+        format.html { redirect_to(@activity) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

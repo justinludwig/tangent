@@ -68,7 +68,11 @@
 
 <% if has_privilege? :view_activities %>
 <table class="tbl">
-<caption>Activities</caption>
+<caption>Activities
+  <span class="caption-tools">
+    <%= link_to "Add", new_event_activity_path(@event) if has_privilege_for_event? @event, :edit_event %>
+  </span>
+</caption>
 <thead>
   <tr>
     <th><%= link_to_order_by "Name", "name" %></th>

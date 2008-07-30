@@ -109,6 +109,16 @@ fieldset .tbl {
 .ie .tbl .caption {
     margin: 0;
 }
+.caption-tools {
+    position: relative;
+    left: 0.7em;
+    top: -0.1em;
+    font-size: 0.8em;
+    font-weight: normal;
+}
+.caption-tools a {
+    padding: 0.2em;
+}
 .tbl th {
     border: solid #ccc;
     border-width: 1px 0;
