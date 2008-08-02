@@ -17,7 +17,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
 
-This program also includes software and content authored by the following:
+This program also includes software and content authored by the following people and organizations:
 
 * David Heinemeier Hansson
   - ruby-on-rails (http://rubyonrails.org/)
@@ -29,6 +29,8 @@ This program also includes software and content authored by the following:
   - will_paginate plugin (http://github.com/mislav/will_paginate/)
 * Stephen Chu
   - action_mailer_tls plugin (http://www.stephenchu.com/2006/06/how-to-use-gmail-smtp-server-to-send.html)
+* Kent Sibilev
+  - async_mailer plugin (http://www.datanoise.com/articles/2006/7/14/asynchronous-email-delivery)
 * Paweł Stradomski
   - sliding_sessions plugin (http://squarewheel.wordpress.com/2007/11/03/session-cookie-expiration-time-in-rails/)
 * Yahoo! Inc
