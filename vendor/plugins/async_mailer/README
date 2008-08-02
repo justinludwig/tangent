@@ -1,0 +1,8 @@
+AsyncMailer
+==============
+
+Use :async_sendmail or :async_smtp delivery_methods if you want to
+send emails in a separate thread from the main thread of execution.
+This way the execution won't be blocked if email system is under a
+heavy load. It is very important when you send emails from a model
+observer which is executed inside of an database transaction.
