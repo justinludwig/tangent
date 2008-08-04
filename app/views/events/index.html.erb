@@ -38,7 +38,7 @@
     <td><%= link_to h(event.name), event %></td>
     <td><%= list_datetime event.start_date %></td>
     <td><%= list_datetime event.end_date %></td>
-    <td><%=h event.tags %></td>
+    <td><%=h event.tag_list %></td>
     <td class="tools">
       <%= link_to titled_image_tag("silk/page_edit.png", :alt => "Edit"), edit_event_path(event) %>
 	  <%= link_to_delete event %>

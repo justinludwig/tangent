@@ -17,6 +17,7 @@
 ## 02110-1301, USA.
 
 class Activity < ActiveRecord::Base
+  acts_as_taggable
   belongs_to :event
 
   has_many :participants, :dependent => :destroy
@@ -26,7 +27,6 @@ class Activity < ActiveRecord::Base
   validates_length_of :name, :maximum => 50
   validates_format_of :name, :with => /\S/ 
   validates_length_of :criteria, :maximum => 100, :allow_blank => true
-  validates_length_of :tags, :maximum => 100, :allow_blank => true
 
   INFINITY = 1.0/0
 

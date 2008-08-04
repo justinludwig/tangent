@@ -54,7 +54,7 @@
 </div>
 <% end -%>
 
-<% unless @event.tags.blank? -%>
+<% unless @event.tag_list.blank? -%>
 <div>
   Tagged as <%= list_tags @event %>
 </div>
@@ -88,7 +88,7 @@
 <% for activity in @activities %>
   <tr class="<%= cycle("", "alt") -%>">
     <td><%= link_to h(activity.name), activity %></td>
-    <td><%=h activity.tags %></td>
+    <td><%=h activity.tag_list %></td>
     <td><%=h activity.criteria %></td>
     <td class="date"><%= activity_datetime @event, activity.start_date %></td>
     <td class="date"><%= activity_datetime @event, activity.end_date %></td>

@@ -199,13 +199,13 @@ module ApplicationHelper
   end
 
   def list_tags(model)
-    model.tags.split(/,/).map { |i|
+    model.tag_list.map { |i|
       content_tag 'span', h(i), :class => 'category'
-    }.join(',') unless model.tags.blank?
+    }.join(', ') unless model.tag_list.blank?
 =begin
-      content_tag 'ol', model.tags.split(/,/).inject('') { |m, i|
+      content_tag 'ol', model.tag_list.inject('') { |m, i|
           m << content_tag('li', h(i), :class => 'category')
-      } unless model.tags.blank?
+      } unless model.tag_list.blank?
 =end
   end
   

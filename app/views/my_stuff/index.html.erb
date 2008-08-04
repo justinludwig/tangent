@@ -39,7 +39,7 @@
   <tr class="<%= cycle("", "alt") -%>">
     <td><%= link_to h(activity.event.name), activity.event %></td>
     <td><%= link_to h(activity.name), activity %></td>
-    <td><%=h activity.tags %></td>
+    <td><%=h activity.tag_list %></td>
     <td><%= list_datetime (activity.start_date || activity.event.start_date) %></td>
     <td><%= list_datetime (activity.end_date || activity.event.end_date) %></td>
   </tr>
@@ -66,7 +66,7 @@
 <% for event in @events %>
   <tr class="<%= cycle("", "alt") -%>">
     <td><%= link_to h(event.name), event %></td>
-    <td><%=h event.tags %></td>
+    <td><%=h event.tag_list %></td>
     <td><%= list_datetime event.start_date %></td>
     <td><%= list_datetime event.end_date %></td>
     <td class="tools">

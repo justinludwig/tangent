@@ -30,7 +30,7 @@
 <fieldset>
   <legend>Event Info</legend>
 <%= f.property_line :text_field, :name, :required => true %>
-<%= f.property_line :text_field, :tags, :description => "separate tags with commas" %>
+<%= f.property_line :text_field, :tag_list, :label => "Tags", :description => "separate with commas" %>
 <%= f.hidden_array_field :temp_coordinator_ids %>
 <%= f.property_line :datetime_input, :start_date, :label => "Start", :required => true, :description => "free-form date like \"tomorrow\" or \"tues 1pm\" or \"2/28/09\"" %>
 <%= f.property_line :datetime_input, :end_date, :label => "End", :description => "free-form date like \"tomorrow\" or \"tues 1pm\" or \"2/28/09\"" %>

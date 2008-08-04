@@ -28,7 +28,7 @@
 <fieldset>
   <legend>Event Info</legend>
 <%= f.property_line :text, :name %>
-<%= f.property_line :text, :tags %>
+<%= f.property_line :text, :tag_list, :label => "Tags" %>
 <%= property_line_tag link_to_array(@event.coordinators), 'coordinators' %>
 <%= f.property_line :datetime, :start_date, :label => "Start" %>
 <%= f.property_line :datetime, :end_date, :label => "End" %>
@@ -41,7 +41,7 @@
 <fieldset>
   <legend>Activity Info</legend>
 <%= f.property_line :text_field, :name, :required => true %>
-<%= f.property_line :text_field, :tags, :description => "separate with commas" %>
+<%= f.property_line :text_field, :tag_list, :label => "Tags", :description => "separate with commas" %>
 <%= f.property_line :text_field, :criteria, :description => "attributes required of participants; separate with commas" %>
 <%= f.property_line :text_field, :openings, :class => 'number', :description => 'maximum number of participants; leave blank for unlimited participants' %>
 <%= f.property_line :datetime_input, :start_date, :label => "Start", :description => "if different than event; free-form date like \"tomorrow\" or \"tues 1pm\" or \"2/28/09\"" %>

@@ -33,7 +33,7 @@ class InitialModels < ActiveRecord::Migration
       t.column :details, :text
       t.column :start_date, :datetime
       t.column :end_date, :datetime
-      t.column :tags, :string, :limit => 100
+      t.column :cached_tag_list, :string, :limit => 100
       t.timestamps
     end
 
@@ -50,7 +50,7 @@ class InitialModels < ActiveRecord::Migration
       t.integer :openings
       t.datetime :start_date
       t.datetime :end_date
-      t.string :tags, :limit => 100
+      t.string :cached_tag_list, :limit => 100
       t.timestamps
     end
 
@@ -60,6 +60,24 @@ class InitialModels < ActiveRecord::Migration
       t.string :state, :limit => 20, :null => :no, :default => 'waiting'
       t.timestamps
     end
+    
+    create_table :tags do |t|
+      t.column :name, :string, :limit => 50
+    end
+    
+    create_table :taggings do |t|
+      t.column :tag_id, :integer
+      t.column :taggable_id, :integer
+      
+      # You should make sure that the column created is
+      # long enough to store the required class names.
+      t.column :taggable_type, :string, :limit => 50
+      
+      t.column :created_at, :datetime
+    end
+    
+    add_index :taggings, :tag_id
+    add_index :taggings, [:taggable_id, :taggable_type]
   end
 
   def self.down
@@ -68,5 +86,7 @@ class InitialModels < ActiveRecord::Migration
     drop_table :event_coordinators
     drop_table :activities
     drop_table :participants
+    drop_table :tags
+    drop_table :taggings
   end
 end

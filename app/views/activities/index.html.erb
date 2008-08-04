@@ -45,7 +45,7 @@
   <tr class="<%= cycle("", "alt") -%>">
   <% if @event %>
     <td><%= link_to h(activity.name), activity %></td>
-    <td><%=h activity.tags %></td>
+    <td><%=h activity.tag_list %></td>
     <td><%=h activity.criteria %></td>
     <td><%=h activity.openings %></td>
     <td><%= list_datetime activity.start_date %></td>
@@ -53,7 +53,7 @@
   <% else %>
     <td><%= link_to h(activity.event.name), activity.event %></td>
     <td><%= link_to h(activity.name), activity %></td>
-    <td><%=h activity.tags %></td>
+    <td><%=h activity.tag_list %></td>
     <td><%= list_datetime (activity.start_date || activity.event.start_date) %></td>
     <td><%= list_datetime (activity.end_date || activity.event.end_date) %></td>
   <% end %>
