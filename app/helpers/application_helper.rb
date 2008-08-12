@@ -27,15 +27,16 @@ module ApplicationHelper
 
   def yui_stylesheet_link_tag
     stylesheet_link_tag(
-      "http://yui.yahooapis.com/2.5.2/build/reset-fonts-grids/reset-fonts-grids.css",
-      "http://yui.yahooapis.com/2.5.2/build/assets/skins/sam/skin.css" 
+      'http://yui.yahooapis.com/2.5.2/build/reset-fonts-grids/reset-fonts-grids.css',
+      'http://yui.yahooapis.com/2.5.2/build/assets/skins/sam/skin.css',
+      :media => 'all'
     )
   end
 
   def yui_javascript_include_tag
     javascript_include_tag(
-      "http://yui.yahooapis.com/2.5.2/build/yuiloader/yuiloader-beta-min.js",
-      "http://yui.yahooapis.com/2.5.2/build/event/event-min.js"
+      'http://yui.yahooapis.com/2.5.2/build/yuiloader/yuiloader-beta-min.js',
+      'http://yui.yahooapis.com/2.5.2/build/event/event-min.js'
     )
   end
 

@@ -103,7 +103,7 @@ class ActivitiesController < ApplicationController
     respond_to do |format|
       if @activity.save
         flash[:notice] = 'Activity was successfully created.'
-        format.html { redirect_to edit_event_path(@event) }
+        format.html { redirect_to event_path(@event) }
         format.xml  { render :xml => @activity, :status => :created, :location => @activity }
       else
         format.html { render :action => "new" }
