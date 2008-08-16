@@ -127,6 +127,7 @@ class Person < ActiveRecord::Base
     end
     
     def do_delete
+      PersonMailer.deliver_deletion_notification self
       self.deleted_at = Time.now.utc
 
       # purge all personal information
@@ -134,6 +135,7 @@ class Person < ActiveRecord::Base
       self.email = nil
       self.crypted_password = nil
       self.salt = nil
+
       # save without validation
       self.save false
     end

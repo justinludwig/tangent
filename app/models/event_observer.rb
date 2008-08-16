@@ -1,4 +1,3 @@
-<%
 ## Tangent, an online sign-up sheet
 ## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
 ## 
@@ -16,20 +15,15 @@
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
--%>
 
-Hi <%= @to %>,
+class EventObserver < ActiveRecord::Observer
+  def after_save(event)
+    # don't send notifications if this event is already over
+    return if (event.end_date || event.start_date) < Time.now.utc
 
-Welcome to <%= AppConfig.name %>! We've created a new account for you. Use the following credentials to login:
-
-    Email: <%= @to.email %>
-    Password: <%= @to.password %>
-
-You can check the activities for which you've signed up (and the events you coordinate) on your My Stuff page at <<%= AppConfig.base_url %>my>. You can also change your password and other account information on your My Profile page at <<%= AppConfig.base_url %>my/profile>.
-
-Enjoy,
-
-The <%= AppConfig.name %> team
-<<%= AppConfig.contact_email %>>
-
-<%= render :partial => 'mailer/footer' %>
+    # automatically filters non-active people
+    event.people.each do |person|
+      EventMailer.deliver_update_notification_for_participant event, person
+    end
+  end
+end

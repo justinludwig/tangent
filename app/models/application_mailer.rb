@@ -19,10 +19,20 @@
 class ApplicationMailer < ActionMailer::Base
   
   protected
-    def set_defaults
+    def set_defaults(person_to = nil, person_from = nil)
       set_smtp_settings
+
       from %{"#{AppConfig.email_from_name}" <#{ActionMailer::Base.smtp_settings[:user_name]}>}
       sent_on Time.now
+
+      recipients format_address(person_to) if person_to
+      reply_to format_address(person_from) if person_from
+
+      body :to => person_to, :from => person_from
+    end
+
+    def format_address(person)
+      %{"#{person.display_name.gsub /"/, '\''}" <#{person.email}>}
     end
     
     def set_smtp_settings

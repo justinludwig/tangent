@@ -20,16 +20,10 @@
 
 Hi <%= @to %>,
 
-Welcome to <%= AppConfig.name %>! We've created a new account for you. Use the following credentials to login:
+You just were <%= @participant.state_as_past_condition %> as a participant <%= @participant.state_preposition %> a <%= AppConfig.name %> activity. Here are the details:
 
-    Email: <%= @to.email %>
-    Password: <%= @to.password %>
-
-You can check the activities for which you've signed up (and the events you coordinate) on your My Stuff page at <<%= AppConfig.base_url %>my>. You can also change your password and other account information on your My Profile page at <<%= AppConfig.base_url %>my/profile>.
-
-Enjoy,
-
-The <%= AppConfig.name %> team
-<<%= AppConfig.contact_email %>>
+    Event: <%= @participant.activity.event %> <<%= polymorphic_url @participant.activity.event %>>
+    Activity: <%= @participant.activity %> <<%= polymorphic_url @participant.activity %>>
+    Status: <%= @participant.state %>
 
 <%= render :partial => 'mailer/footer' %>

@@ -48,16 +48,46 @@ class Participant < ActiveRecord::Base
   end
 
   def to_s
-    s = String.new person.display_name
+    "#{person} #{state} #{state_preposition} #{activity}"
+  end
+
+  def state_preposition
     case state
       when 'confirmed', 'tentative', 'waiting'
-        s << " #{state} for "
+        'for'
       when 'invited'
-        s << " #{state} to "
+        'to'
       when 'withdrawn'
-        s << " #{withdrawn} from "
+        'from'
     end
-    s << activity.name
+  end
+
+  # as in "bob #{state_as_past_action} #{state_prepositon} this activity"
+  def state_as_past_action(person = 3)
+    case state
+      when 'confirmed'
+        "#{state}"
+      when 'tentative'
+        "confirmed tentatively"
+      when 'invited'
+        "#{person == 2 ? 'were' : 'was'} #{state}"
+      when 'waiting'
+        "#{person == 2 ? 'were' : 'was'} wait-listed"
+      when 'withdrawn'
+        "withdrew"
+    end
+  end
+
+  # as in "bob was #{state_as_past_action} #{state_prepositon} this activity"
+  def state_as_past_condition
+    case state
+      when 'confirmed', 'invited', 'withdrawn'
+        "#{state}"
+      when 'tentative'
+        "confirmed tentatively"
+      when 'waiting'
+        "wait-listed"
+    end
   end
 
 end

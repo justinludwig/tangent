@@ -22,6 +22,7 @@ class Event < ActiveRecord::Base
   has_many :event_coordinators, :dependent => :destroy
   has_many :coordinators, :through => :event_coordinators, :uniq => true, :order => "display_name", :conditions => "state = 'active'"
   has_many :activities, :order => "name", :dependent => :destroy
+  has_many :participants, :through => :activities, :include => [:activity, :person], :order => "people.display_name"
 
   validates_presence_of :name
   validates_length_of :name, :maximum => 50
@@ -31,6 +32,16 @@ class Event < ActiveRecord::Base
   # override toString with event name
   def to_s
     name
+  end
+
+  # list unique people who are participants
+  # todo: do filtering in db
+  def people
+    participants.inject([]) do |memo, participant|
+      person = participant.person
+      memo << person if (person.active? && !memo.include?(person))
+      memo
+    end
   end
 
   # use temp ids until event has been created

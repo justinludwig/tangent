@@ -18,27 +18,26 @@
 
 class PersonMailer < ApplicationMailer
   def signup_notification(person)
-    setup_email person
+    set_defaults person
     subject "Welcome to #{AppConfig.name}"
     @body.merge! :why => " that your account was created"
   end
   
   def activation(person)
-    setup_email person
+    set_defaults person
     subject "Your #{AppConfig.name} account has been activated"
   end
 
+  def deletion_notification(person)
+    set_defaults person
+    subject "Goodbye from #{AppConfig.name}"
+    @body.merge! :why => " that your account was deleted permanently"
+  end
+
   def personal_email(to, from, the_subject, the_body)
-    setup_email to
+    set_defaults to, from
     subject the_subject
-    reply_to %{"#{from.display_name.gsub /"/, '\''}" <#{from.email}>}
-    @body.merge! :from => from, :body => the_body, :why => " of a personal message from #{from.display_name} (you can view this person's profile at <#{person_url from, :only_path => false}>)"
+    @body.merge! :body => the_body, :why => " of a personal message from #{from.display_name} (you can view this person's profile at <#{person_url from, :only_path => false}>)"
   end
   
-  protected
-    def setup_email(person)
-      set_defaults
-      recipients %{"#{person.display_name.gsub /"/, '\''}" <#{person.email}>}
-      body :person => person
-    end
 end

@@ -1,4 +1,3 @@
-<%
 ## Tangent, an online sign-up sheet
 ## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
 ## 
@@ -16,20 +15,14 @@
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
--%>
 
-Hi <%= @to %>,
+class EventMailer < ApplicationMailer
 
-Welcome to <%= AppConfig.name %>! We've created a new account for you. Use the following credentials to login:
+  def update_notification_for_participant(event, person)
+    set_defaults person
 
-    Email: <%= @to.email %>
-    Password: <%= @to.password %>
-
-You can check the activities for which you've signed up (and the events you coordinate) on your My Stuff page at <<%= AppConfig.base_url %>my>. You can also change your password and other account information on your My Profile page at <<%= AppConfig.base_url %>my/profile>.
-
-Enjoy,
-
-The <%= AppConfig.name %> team
-<<%= AppConfig.contact_email %>>
-
-<%= render :partial => 'mailer/footer' %>
+    subject "#{event}: Updated"
+    @body.merge! :event => event, :why => " of a change to an event in which you are participating"
+  end
+  
+end

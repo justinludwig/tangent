@@ -1,4 +1,3 @@
-<%
 ## Tangent, an online sign-up sheet
 ## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
 ## 
@@ -16,20 +15,21 @@
 ## along with this program; if not, write to the Free Software
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
--%>
 
-Hi <%= @to %>,
+class ParticipantMailer < ApplicationMailer
 
-Welcome to <%= AppConfig.name %>! We've created a new account for you. Use the following credentials to login:
+  def update_notification_for_owner(participant, owner)
+    set_defaults owner
 
-    Email: <%= @to.email %>
-    Password: <%= @to.password %>
+    subject "#{participant.activity} for #{participant.activity.event}: Participant #{participant.state.capitalize}"
+    @body.merge! :participant => participant, :why => " of a change to the participation in an activity you coordinate"
+  end
+  
+  def update_notification_for_self(participant)
+    set_defaults participant.person
 
-You can check the activities for which you've signed up (and the events you coordinate) on your My Stuff page at <<%= AppConfig.base_url %>my>. You can also change your password and other account information on your My Profile page at <<%= AppConfig.base_url %>my/profile>.
-
-Enjoy,
-
-The <%= AppConfig.name %> team
-<<%= AppConfig.contact_email %>>
-
-<%= render :partial => 'mailer/footer' %>
+    subject "#{participant.activity} for #{participant.activity.event}: You are #{participant.state.capitalize}"
+    @body.merge! :participant => participant, :why => " of your participation in this #{AppConfig.name} activity"
+  end
+  
+end
