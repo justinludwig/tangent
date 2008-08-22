@@ -201,4 +201,20 @@ class ParticipantsController < ApplicationController
     end
   end
 
+  # withdraw self
+  def withdraw
+    return unless has_privilege :edit_participants_for_self
+    
+    @activity = Activity.find params[:activity_id]
+    @participant = @activity.participants.find_by_person_id current_person.id
+    
+    @participant.withdraw! if @participant
+    flash[:notice] = 'Your participation is withdrawn.'
+        
+    respond_to do |format|
+      format.html { redirect_to @activity }
+      format.xml  { render :xml => @participant, :status => :ok, :location => @participant }
+    end
+  end
+
 end

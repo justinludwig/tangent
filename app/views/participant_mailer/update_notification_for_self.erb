@@ -26,4 +26,6 @@ You just were <%= @participant.state_as_past_condition %> as a participant <%= @
     Activity: <%= @participant.activity %> <<%= polymorphic_url @participant.activity %>>
     Status: <%= @participant.state %>
 
+To change your participation, login to <%= AppConfig.name %> at <<%= AppConfig.base_url %>my>, go back to the activity page at <<%= polymorphic_url @participant.activity %>>, and use the cotnrols in the My Status box in the upper right of the page.
+
 <%= render :partial => 'mailer/footer' %>

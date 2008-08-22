@@ -45,10 +45,11 @@
   <div class="content">
   <% if logged_in? -%>
     <div>
-      <%= @participant.blank? ? 'Not signed-up' : @participant.state.capitalize %>
+      <%= !@participant ? 'Not signed-up' : @participant.state.capitalize %>
     </div>
     <div class="buttons">
-      <%= styled_button_to 'Sign Up', sign_up_activity_participants_path(@activity), :style => "width:8em;" %>
+      <%= styled_button_to (!@participant || @participant.withdrawn? ? 'Sign Up' : 'Confirm'), confirm_activity_participants_path(@activity), :style => "width:8em;" if (@activity.available? && !(@participant && @participant.confirmed?)) %>
+      <%= styled_button_to 'Withdraw', withdraw_activity_participants_path(@activity), :style => "width:8em;" unless (!@participant || @participant.withdrawn?) %>
     </div>
 
   <% else -%>

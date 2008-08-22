@@ -44,7 +44,7 @@ class Participant < ActiveRecord::Base
   end
 
   event :withdraw do
-    transitions :from => [:invited, :tentative, :confirmed], :to => :withdrawn
+    transitions :from => [:waiting, :invited, :tentative, :confirmed], :to => :withdrawn
   end
 
   def to_s
