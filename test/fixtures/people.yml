@@ -16,19 +16,27 @@
 ## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 ## 02110-1301, USA.
 
-quentin:
-  id: 1
-  display_name: Quentin
-  email: quentin@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%= 5.days.ago.to_s :db %>
+alice:
+  display_name: Alice
+  email: alice@example.com
+  salt: 18f8df8176f38c3bb9ca637e9e5ccfedb62c01a9
+  crypted_password: fe438920639f8991fa53215025d8425b65fa5198 # password
+  created_at: <%= 1.month.ago.to_s :db %>
   state: active
-aaron:
-  id: 2
-  display_name: Aaron
-  email: aaron@example.com
-  salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
-  crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
-  created_at: <%= 1.days.ago.to_s :db %>
+
+bob:
+  display_name: Bob
+  email: bob@example.com
+  salt: 18f8df8176f38c3bb9ca637e9e5ccfedb62c01a9
+  crypted_password: fe438920639f8991fa53215025d8425b65fa5198 # password
+  created_at: <%= 1.week.ago.to_s :db %>
+  state: active
+
+cathy:
+  display_name: Cathy
+  email: cathy@example.com
+  salt: 18f8df8176f38c3bb9ca637e9e5ccfedb62c01a9
+  crypted_password: fe438920639f8991fa53215025d8425b65fa5198 # password
+  created_at: <%= 1.day.ago.to_s :db %>
+  updated_at: <%= 1.hour.ago.to_s :db %>
   state: active

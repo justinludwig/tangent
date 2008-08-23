@@ -52,9 +52,9 @@ class Event < ActiveRecord::Base
   # store new ids until event has been updated
   # and allow ids to be either an array or a csv string
   def temp_coordinator_ids=(ids)
-    logger.info("---- ids=" + ids.inspect)
+    ids ||= []
     # convert string to array of integers
-    ids = ids.split /,|\s/ if ids.is_a? String
+    ids = ids.split /\s*,\s*/ if ids.is_a? String
     ids = ids.map { |i| i.to_i }
     
     # validate at least one coordinator
@@ -73,11 +73,14 @@ class Event < ActiveRecord::Base
 
     @temp_coordinator_ids = ids
   end
+
+protected
   
   # override to check coordinator id errors
   def validate
-    return if @temp_coordinator_errors == nil
-    @temp_coordinator_errors.each { |err| errors.add 'temp_coordinator_ids', err }
+    errors.add 'end_date', 'is earlier than Start Date' if end_date && end_date < start_date
+
+    @temp_coordinator_errors.each { |err| errors.add 'temp_coordinator_ids', err } if @temp_coordinator_errors
     @temp_coordinator_errors = nil
   end
 

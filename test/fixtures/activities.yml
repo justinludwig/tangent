@@ -1,19 +1,53 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+## Tangent, an online sign-up sheet
+## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
+## 
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+## 02110-1301, USA.
 
-one:
-  name: MyString
-  details: MyText
-  criteria: MyString
-  openings: 1
-  start_date: 2008-05-09 12:49:23
-  end_date: 2008-05-09 12:49:23
-  tags: MyString
+candlemas_attendee:
+  event: candlemas
+  name: Attendee
+  created_at: 2007-12-25
+  updated_at: 2007-12-25
 
-two:
-  name: MyString
-  details: MyText
-  criteria: MyString
+candlemas_bring_candles:
+  event: candlemas
+  name: Bring Candles
+  details: <p>We're going to need a whole bunch of <i>candles</i> for <i>Candlemas</i>, so please bring 'em in all shapes, colors, and sizes! Also, pleas show up an hour early.</p>
+  openings: 3
+  start_date: 2008-02-01 23:00:00
+  created_at: 2007-12-25
+  updated_at: 2007-12-25
+
+lammas_attendee:
+  event: lammas
+  name: Attendee
+  created_at: 2008-06-24
+  updated_at: 2008-06-24
+
+lammas_bake_bread:
+  event: lammas
+  name: Bake Bread
+  details: <p>Please bakea da breada. (You'll need to start a few days early on this.)</p>
   openings: 1
-  start_date: 2008-05-09 12:49:23
-  end_date: 2008-05-09 12:49:23
-  tags: MyString
+  start_date: 2008-07-22
+  end_date: 2008-07-29
+
+all_hallows_attendee:
+  event: all_hallows
+  name: Attendee
+  created_at: 2007-11-01 09:11:01
+  updated_at: 2007-11-01 09:11:01
+

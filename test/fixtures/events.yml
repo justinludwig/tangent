@@ -1,17 +1,48 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+## Tangent, an online sign-up sheet
+## Copyright (C) 2008 Justin Ludwig and Adam Stuenkel
+## 
+## This program is free software; you can redistribute it and/or
+## modify it under the terms of the GNU General Public License
+## as published by the Free Software Foundation; either version 2
+## of the License, or (at your option) any later version.
+## 
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+## GNU General Public License for more details.
+## 
+## You should have received a copy of the GNU General Public License
+## along with this program; if not, write to the Free Software
+## Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+## 02110-1301, USA.
 
-one:
-  name: MyString
-  description: MyString
-  details: MyText
-  start-date: 2008-03-29 11:56:17
-  end-date: 2008-03-29 11:56:17
-  tags: MyString
+candlemas:
+  name: Candlemas
+  details: <p>Get out your <b>candles</b> and get <b>purified</b>!</p>
+  start_date: 2008-02-02
+  created_at: 2007-12-25
+  updated_at: 2007-12-25
 
-two:
-  name: MyString
-  description: MyString
-  details: MyText
-  start-date: 2008-03-29 11:56:17
-  end-date: 2008-03-29 11:56:17
-  tags: MyString
+whitsun:
+  name: Whitsun
+  details: <p>Put on the old <b>white robe</b> and talk like an <b>Egyptian</b>!</p>
+  start_date: 2008-05-11 00:00:00
+  end_date: 2008-05-18 00:00:00
+  created_at: 2008-04-01
+  updated_at: 2008-04-15
+
+lammas:
+  name: Lammas
+  details: <p>Eat that <b>bread</b>! Yum!</p>
+  start_date: 2008-08-01
+  created_at: 2008-06-24
+  updated_at: 2008-06-24
+
+all_hallows:
+  name: All Hallows
+  details: <p>Let's <b>dress up</b> and party on the eve of <b>All Hallows</b>!</p>
+  start_date: 2008-10-31 10:00:00
+  end_date: 2008-11-01 01:00:00
+  created_at: 2007-11-01 09:11:01
+  updated_at: 2008-08-31 11:01:09
+

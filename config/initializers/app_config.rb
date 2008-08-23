@@ -21,10 +21,10 @@ require 'yaml'
 
 # from http://kpumuk.info/ruby-on-rails/flexible-application-configuration-in-ruby-on-rails/
 # load config settings into AppConfig class
-config = OpenStruct.new(YAML.load_file("#{RAILS_ROOT}/config/app_config.yml"))
-env_config = config.send(RAILS_ENV)
-config.common.update(env_config) unless env_config.nil?
-::AppConfig = OpenStruct.new(config.common)
+config = OpenStruct.new YAML.load_file("#{RAILS_ROOT}/config/app_config.yml")
+env_config = config.send RAILS_ENV if RAILS_ENV.blank?
+config.common.update env_config unless env_config.blank?
+::AppConfig = OpenStruct.new config.common
 
 # initialize other classes with app_config settings
 ActionMailer::Base.default_url_options[:host] = AppConfig.host
