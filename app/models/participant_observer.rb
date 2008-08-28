@@ -22,7 +22,7 @@ class ParticipantObserver < ActiveRecord::Observer
     return if participant.created_at == participant.updated_at
 
     # don't send notifications if this event is already over
-    end_date = participant.activity.activity_or_event_end_date || participant.activty.activity_or_event_start_date
+    end_date = participant.activity.activity_or_event_end_date || participant.activity.activity_or_event_start_date
     return if end_date < Time.now.utc
 
     # notify participant herself

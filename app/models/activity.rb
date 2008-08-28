@@ -59,4 +59,10 @@ class Activity < ActiveRecord::Base
     return end_date || event.end_date
   end
 
+protected
+  
+  def validate
+    errors.add 'end_date', 'is earlier than Start Date' if (start_date && end_date && start_date > end_date)
+  end
+
 end

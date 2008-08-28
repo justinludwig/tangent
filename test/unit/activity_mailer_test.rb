@@ -17,10 +17,9 @@
 ## 02110-1301, USA.
 
 require File.dirname(__FILE__) + '/../test_helper'
-require 'person_mailer'
+require 'activity_mailer'
 
-class PersonMailerTest < Test::Unit::TestCase
-  fixtures :people
+class ActivityMailerTest < Test::Unit::TestCase
   FIXTURES_PATH = File.dirname(__FILE__) + '/../fixtures'
   CHARSET = "utf-8"
 
@@ -35,30 +34,21 @@ class PersonMailerTest < Test::Unit::TestCase
     @expected.set_content_type "text", "plain", { "charset" => CHARSET }
   end
 
-  def test_signup_notification
-    alice = people :alice
-    mail = PersonMailer.create_signup_notification alice
-    assert_match /Hi #{alice}/, mail.body
-    assert_match /Email: #{alice.email}/, mail.body
-    assert_match /Password: #{alice.password}/, mail.body
-  end
+  def test_update_notification_for_participant
+    participant = participants :candlemas_attendee_bob
+    person = participant.person
+    activity = participant.activity
+    event = activity.event
 
-  def test_deletion_notification
-    alice = people :alice
-    mail = PersonMailer.create_deletion_notification alice
-    assert_match /Hi #{alice}/, mail.body
-  end
-
-  def test_personal_email
-    alice = people :alice
-    bob = people :bob
-    mail = PersonMailer.create_personal_email alice, bob, "hi", "you"
-    assert_match /#{bob} <#{bob.email}> sez/, mail.body
+    mail = ActivityMailer.create_update_notification_for_participant participant
+    assert_match /Hi #{person}/, mail.body
+    assert_match /Event: #{event} <#{AppConfig.base_url}events\/#{event.id}>/, mail.body
+    assert_match /Activity: #{activity} <#{AppConfig.base_url}activities\/#{activity.id}>/, mail.body
   end
 
   private
     def read_fixture(action)
-      IO.readlines("#{FIXTURES_PATH}/person_mailer/#{action}")
+      IO.readlines("#{FIXTURES_PATH}/activity_mailer/#{action}")
     end
 
     def encode(subject)

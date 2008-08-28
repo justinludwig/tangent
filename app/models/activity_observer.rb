@@ -19,7 +19,7 @@
 class ActivityObserver < ActiveRecord::Observer
   def after_save(activity)
     # don't send notifications to participants if this activity is already over
-    end_date = activity.end_date || activity.event.end_date || activty.start_date || activity.event.start_date
+    end_date = activity.activity_or_event_end_date || activity.activity_or_event_start_date
     activity.participants.each do |participant|
       # send only to active people
       ActivityMailer.deliver_update_notification_for_participant participant if participant.person.active?
