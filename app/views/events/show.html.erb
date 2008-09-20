@@ -93,7 +93,7 @@
     <td class="date"><%= activity_datetime @event, activity.start_date %></td>
     <td class="date"><%= activity_datetime @event, activity.end_date %></td>
     <td class="number"><%= activity.available %></td>
-    <td class="tools"><%= link_to h(my_status_display activity), activity if activity.available? %></td>
+    <td class="tools"><%= link_to h(my_status_display(activity)), activity if activity.available? %></td>
   </tr>
 <% end %>
 </table>

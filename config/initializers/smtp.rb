@@ -24,4 +24,4 @@ env_config = config[RAILS_ENV]
 config['common'].update(env_config) unless env_config.nil?
 # convert strings to symbols
 ActionMailer::Base.smtp_settings = config['common'].inject({}) { |h,e| h[e[0].to_sym] = e[1]; h }
-ActionMailer::Base.delivery_method = :async_smtp
+ActionMailer::Base.delivery_method = :async_smtp unless RAILS_ENV == 'test'

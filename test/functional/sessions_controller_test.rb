@@ -19,85 +19,62 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require 'sessions_controller'
 
-# Re-raise errors caught by the controller.
-class SessionsController; def rescue_action(e) raise e end; end
-
-class SessionsControllerTest < Test::Unit::TestCase
-  # Be sure to include AuthenticatedTestHelper in test/test_helper.rb instead
-  # Then, you can remove it from this and the units test.
-  include AuthenticatedTestHelper
-
+class SessionsControllerTest < ActionController::TestCase
   fixtures :people
 
-  def setup
-    @controller = SessionsController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
-  end
-
   def test_should_login_and_redirect
-    post :create, :login => 'quentin', :password => 'test'
+    post :create, :login => people(:alice).email, :password => 'password'
     assert session[:person_id]
     assert_response :redirect
   end
 
   def test_should_fail_login_and_not_redirect
-    post :create, :login => 'quentin', :password => 'bad password'
+    post :create, :login => people(:alice).email, :password => 'bad password'
     assert_nil session[:person_id]
     assert_response :success
   end
 
   def test_should_logout
-    login_as :quentin
+    login_as :alice
     get :destroy
     assert_nil session[:person_id]
     assert_response :redirect
   end
 
   def test_should_remember_me
-    post :create, :login => 'quentin', :password => 'test', :remember_me => "1"
-    assert_not_nil @response.cookies["auth_token"]
+    post :create, :login => people(:alice).email, :password => 'password', :remember_me => 'true'
+    assert session[:auth_expires] > Time.now + 1.hour
   end
 
   def test_should_not_remember_me
-    post :create, :login => 'quentin', :password => 'test', :remember_me => "0"
-    assert_nil @response.cookies["auth_token"]
+    post :create, :login => people(:alice).email, :password => 'password'
+    assert session[:auth_expires] < Time.now + 1.hour
   end
   
   def test_should_delete_token_on_logout
-    login_as :quentin
+    login_as :alice
     get :destroy
-    assert_equal @response.cookies["auth_token"], []
+    assert_nil session[:auth_expires]
   end
 
   def test_should_login_with_cookie
-    people(:quentin).remember_me
-    @request.cookies["auth_token"] = cookie_for(:quentin)
+    login_as :alice
     get :new
     assert @controller.send(:logged_in?)
   end
 
   def test_should_fail_expired_cookie_login
-    people(:quentin).remember_me
-    people(:quentin).update_attribute :remember_token_expires_at, 5.minutes.ago
-    @request.cookies["auth_token"] = cookie_for(:quentin)
+    login_as :alice
+    @request.session[:auth_expires] = Time.now - 1.day
     get :new
     assert !@controller.send(:logged_in?)
   end
 
   def test_should_fail_cookie_login
-    people(:quentin).remember_me
-    @request.cookies["auth_token"] = auth_token('invalid_auth_token')
+    @request.session[:person_id] = 666
+    @request.session[:auth_expires] = Time.now + 1.day
     get :new
     assert !@controller.send(:logged_in?)
   end
 
-  protected
-    def auth_token(token)
-      CGI::Cookie.new('name' => 'auth_token', 'value' => token)
-    end
-    
-    def cookie_for(person)
-      auth_token people(person).remember_token
-    end
 end
