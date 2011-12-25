@@ -1,0 +1,7 @@
+.loadpath
+.project
+config/app_config.yml
+config/mailer.yml
+*.sqlite3
+*.log
+*.db
